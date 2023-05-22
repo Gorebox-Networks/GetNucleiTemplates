@@ -35,10 +35,24 @@ def clone_repo(url: str, index: int) -> Tuple[bool, bool]:
     repo_name = url.split('/')[-1]  # Extract repository name
     repo_name = f"{repo_name}_{index}"  # Append index to make it unique
 
+    if os.path.exists(repo_name):
+        print(f"Repository {repo_name} already exists. Skipping.")
+        return False, False
+
     try:
         print(f"Cloning {url} into {repo_name}")
         # Clone the repository using a subprocess command instead of gitpython
-        subprocess.check_output(['git', 'clone', '--no-checkout', '--depth', '1', url, repo_name])
+        process = subprocess.Popen(
+            ['git', 'clone', '--depth', '1', url, repo_name], 
+            env=dict(os.environ, GIT_TERMINAL_PROMPT='0'),  # Set GIT_TERMINAL_PROMPT=0
+            stdout=subprocess.DEVNULL,  # Optional: Suppress stdout
+            stderr=subprocess.DEVNULL,  # Optional: Suppress stderr
+        )
+        process.communicate()  # Wait for process to complete
+
+        if process.returncode != 0:
+            raise subprocess.CalledProcessError(process.returncode, 'git')
+
         return True, False
 
     except subprocess.CalledProcessError as e:
