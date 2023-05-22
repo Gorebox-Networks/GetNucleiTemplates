@@ -3,28 +3,25 @@
 # Author: David Espejo (Fortytwo Security)
 import os
 import git
+import requests
 
-def clone_repos(repo_file):
-    # Read file
-    with open(repo_file, 'r') as file:
-        repos = file.read().splitlines()
+# create directory for the repositories if it doesn't exist
+if not os.path.exists("nuclei_templates"):
+    os.makedirs("nuclei_templates")
 
-    # Create a directory to store the repositories if it doesn't exist
-    os.makedirs('nuclei_templates', exist_ok=True)
+# Change the current working directory
+os.chdir("nuclei_templates")
 
-    # Change current directory to the newly created one
-    os.chdir('nuclei_templates')
+# Read URLs from the text file
+with open('../nuclei.txt', 'r') as f:
+    urls = f.readlines()
 
-    # Loop over the repos and clone them
-    for repo in repos:
-        try:
-            print(f"Cloning {repo}")
-            git.Repo.clone_from(repo, os.path.basename(repo))
-            print(f"Successfully cloned {repo}")
-        except git.GitCommandError as e:
-            print(f"Failed to clone {repo}. Reason: {str(e)}")
-
-    print("Done cloning repositories!")
-
-# Provide the text file containing the list of repositories
-clone_repos('nuclei.txt')
+for index, url in enumerate(urls):
+    url = url.strip()  # Remove newline characters
+    try:
+        repo_name = url.split('/')[-1]  # Extract repository name
+        repo_name = f"{repo_name}_{index}"  # Append index to make it unique
+        print(f"Cloning {url} into {repo_name}")
+        git.Repo.clone_from(url, repo_name)  # Clone the repository
+    except Exception as e:
+        print(f"Failed to clone {url}. Reason: {e}")
