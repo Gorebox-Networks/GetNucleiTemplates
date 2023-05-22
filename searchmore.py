@@ -14,7 +14,7 @@ def debug_log(msg: str, debug: bool):
     if debug:
         print(msg)
 
-def search_github_repos(query_terms):
+def search_github_repos(query_terms, debug=False):
     base_url = "https://api.github.com"
     token = input("Please enter your GitHub API token (press 'Enter' for unauthenticated): ")
     headers = {'Accept': 'application/vnd.github.v3+json'}
