@@ -92,7 +92,7 @@ def search_github_repos(query_terms, debug=False):
                     file.write(f"{repo}\n")
 
             print("Running getnucleitemplates.py...")
-            subprocess.run(["python3", "getnucleitemplates.py -f ", new_templates_file])
+            subprocess.run(["python3", "getnucleitemplates.py", "-f", new_templates_file])
         
         user_input = input("\nDo you want to add the new found repositories to nuclei.txt? (y/n): ")
         if user_input.lower() == 'y':
