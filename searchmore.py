@@ -7,7 +7,6 @@ import time
 import os
 import subprocess
 import shutil
-import yaml
 
 def search_github_repos(query_terms):
     base_url = "https://api.github.com"
@@ -51,27 +50,11 @@ def search_github_repos(query_terms):
                 continue
 
             contents = contents_response.json()
-
-            yaml_files = [file for file in contents if file['name'].endswith(('.yaml', '.yml'))]
-
-            for yaml_file in yaml_files:
-                yaml_file_url = yaml_file['download_url']
-                yaml_file_content = requests.get(yaml_file_url).text
-
-                try:
-                    yaml_data = yaml.safe_load(yaml_file_content)
-                except yaml.YAMLError as e:
-                    print(f"YAML parsing error for file {yaml_file['name']}: {e}")
-                    print("Skipping this file due to YAML parsing error.")
-                    continue
-
-                # Check if the YAML file contains the required fields for a Nuclei template
-                if 'id' in yaml_data and 'requests' in yaml_data:
-                    repo_url = repo['html_url']
-                    if repo_url not in existing_repos:
-                        print(f"Found New Nuclei Template Repo: {repo_url}")
-                        found_repos.append(repo_url)
-                    break
+            if any(file['name'].endswith(('.yaml', '.yml')) for file in contents):
+                repo_url = repo['html_url']
+                if repo_url not in existing_repos:
+                    print(f"Found New Nuclei Template Repo: {repo_url}")
+                    found_repos.append(repo_url)
 
         if 'next' not in response.links:
             break
@@ -82,12 +65,18 @@ def search_github_repos(query_terms):
     user_input = input("Do you want to download the found repositories? (y/n): ")
 
     if user_input.lower() == 'y':
-        with open("nuclei.txt", "a") as file:  # Open in append mode
+        with open("new_templates.txt", "a") as file:  # Open in append mode
             for repo in found_repos:
                 file.write(f"{repo}\n")
 
         print("Running getnucleitemplates.py...")
         subprocess.run(["python3", "getnucleitemplates.py"])
+    
+    user_input = input("\nDo you want to add the new found repositories to nuclei.txt? (y/n): ")
+    if user_input.lower() == 'y':
+        with open("nuclei.txt", "a") as file:
+            for repo in found_repos:
+                file.write(f"{repo}\n")
 
 if __name__ == "__main__":
     search_terms = ["nuclei-templates", "nuclei-scripts", "nuclei-configs"]
