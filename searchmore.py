@@ -9,7 +9,10 @@ import subprocess
 
 def search_github_repos(query_terms):
     base_url = "https://api.github.com"
+    token = input("Please enter your GitHub API token (press 'Enter' for unauthenticated): ")
     headers = {'Accept': 'application/vnd.github.v3+json'}
+    if token.strip():  # If the user provided a token
+        headers['Authorization'] = f'token {token}'
     search_url = f"{base_url}/search/repositories"
     search_params = {'q': ' OR '.join(query_terms), 'page': 1}
 
