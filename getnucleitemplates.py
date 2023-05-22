@@ -2,11 +2,11 @@
 # -*- coding: utf-8 -*-
 # Author: David Espejo (Fortytwo Security)
 import os
-import git
+import subprocess  # Changed from git to subprocess
 import requests
 from typing import List, Tuple
 import shutil
-import argparse  # added import for argument parsing
+import argparse
 
 # Get the directory of this script
 script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -20,7 +20,7 @@ def read_urls_from_file(filepath: str) -> List[str]:
 def is_url_valid(url: str) -> bool:
     """Check if the URL exists and is not a 404."""
     try:
-        response = requests.get(url)
+        response = requests.head(url, allow_redirects=True)
         return response.status_code != 404
     except requests.ConnectionError:
         return False
@@ -37,17 +37,11 @@ def clone_repo(url: str, index: int) -> Tuple[bool, bool]:
 
     try:
         print(f"Cloning {url} into {repo_name}")
-        repo = git.Repo.clone_from(url, repo_name)  # Clone the repository
+        # Clone the repository using a subprocess command instead of gitpython
+        subprocess.check_output(['git', 'clone', '--no-checkout', '--depth', '1', url, repo_name])
+        return True, False
 
-        # Check if the repository contains .yaml or .yml files (nuclei templates)
-        for file in repo.tree().traverse():
-            if file.path.endswith(('.yaml', '.yml')):
-                return True, False
-
-        print(f"No valid Nuclei templates found in {url}")
-        return False, False
-
-    except Exception as e:
+    except subprocess.CalledProcessError as e:
         print(f"Failed to clone {url}. Reason: {e}")
         return False, False
 
@@ -64,7 +58,7 @@ def main():
     args = parser.parse_args()
 
     # Path to the file
-    filepath = os.path.join(script_dir, args.file)  # used the filename provided as argument
+    filepath = os.path.join(script_dir, args.file)
 
     # Backup original file before any modifications
     shutil.copy2(filepath, f'{filepath}.bak')
