@@ -21,6 +21,8 @@ Nuclei is a project that allows you to customize scanning for specific vulnerabi
 * Run the getnucleitemplates.py script to clone the repositories. It will clone the repositories into a new nuclei_templates directory, ignore commented lines, and comment out any invalid URLs.
 
   python3 getnucleitemplates.py
+  
+  By default it uses the provided nuclei.txt file. With -f (--file) you can provide a custom file.
 
 * You will see a summary of the attempted downloads, successful downloads, failed downloads, ignored gists, and ignored invalid URLs. Any failed or invalid repository URLs will be commented out in nuclei.txt.
 * To find more repositories, run the searchmore.py script. This will search GitHub for repositories containing the string "nuclei-templates". It will handle pagination to ensure all possible repositories are found, and respect GitHub's rate limits.
