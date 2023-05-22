@@ -15,6 +15,9 @@ def search_github_repos(query_terms):
 
     found_repos = []
 
+    with open("nuclei.txt", "r") as file:
+        existing_repos = set(line.strip() for line in file.readlines())
+
     while True:
         response = requests.get(search_url, headers=headers, params=search_params)
 
@@ -43,15 +46,17 @@ def search_github_repos(query_terms):
 
             contents = contents_response.json()
             if any(file['name'].endswith(('.yaml', '.yml')) for file in contents):
-                print(f"Found Nuclei Template Repo: {repo['html_url']}")
-                found_repos.append(repo['html_url'])
+                repo_url = repo['html_url']
+                if repo_url not in existing_repos:
+                    print(f"Found New Nuclei Template Repo: {repo_url}")
+                    found_repos.append(repo_url)
 
         if 'next' not in response.links:
             break
 
         search_params['page'] += 1
 
-    print(f"\nFound {len(found_repos)} Nuclei Template repositories.")
+    print(f"\nFound {len(found_repos)} new Nuclei Template repositories.")
     user_input = input("Do you want to download the found repositories? (y/n): ")
 
     if user_input.lower() == 'y':
