@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Author: David Espejo (Fortytwo Security)
 import os
 import git
 
@@ -16,9 +19,17 @@ with open('../nuclei.txt', 'r') as f:
 total_attempts = 0
 successful_downloads = 0
 failed_downloads = 0
+ignored_gists = 0
 
 for index, url in enumerate(urls):
     url = url.strip()  # Remove newline characters
+    
+    # Ignore if URL is a gist
+    if "gist.github.com" in url:
+        print(f"Ignoring gist: {url}")
+        ignored_gists += 1
+        continue
+
     repo_name = url.split('/')[-1]  # Extract repository name
     repo_name = f"{repo_name}_{index}"  # Append index to make it unique
     total_attempts += 1
@@ -40,3 +51,4 @@ for directory in os.listdir("."):
 print(f"\nTotal attempted downloads: {total_attempts}")
 print(f"Successful downloads: {successful_downloads}")
 print(f"Failed downloads: {failed_downloads}")
+print(f"Ignored gists: {ignored_gists}")
