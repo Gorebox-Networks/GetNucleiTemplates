@@ -62,6 +62,7 @@ def search_github_repos(query_terms):
                     yaml_data = yaml.safe_load(yaml_file_content)
                 except yaml.YAMLError as e:
                     print(f"YAML parsing error for file {yaml_file['name']}: {e}")
+                    print("Skipping this file due to YAML parsing error.")
                     continue
 
                 # Check if the YAML file contains the required fields for a Nuclei template
