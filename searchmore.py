@@ -22,6 +22,13 @@ def search_github_repos(query_terms):
     shutil.copy("nuclei.txt", "nuclei.txt.bak")
     with open("nuclei.txt.bak", "r") as file:
         existing_repos = set(line.strip() for line in file.readlines() if line.strip() and not line.startswith("#"))
+    
+    new_templates_file = "new_templates.txt"
+    if not os.path.exists(new_templates_file):
+        with open(new_templates_file, 'w'): pass  # create the file if it doesn't exist
+
+    with open(new_templates_file, "r") as file:
+        new_templates_repos = set(line.strip() for line in file.readlines() if line.strip() and not line.startswith("#"))
 
     while True:
         response = requests.get(search_url, headers=headers, params=search_params)
@@ -52,7 +59,7 @@ def search_github_repos(query_terms):
             contents = contents_response.json()
             if any(file['name'].endswith(('.yaml', '.yml')) for file in contents):
                 repo_url = repo['html_url']
-                if repo_url not in existing_repos:
+                if repo_url not in existing_repos and repo_url not in new_templates_repos:
                     print(f"Found New Nuclei Template Repo: {repo_url}")
                     found_repos.append(repo_url)
 
@@ -65,12 +72,12 @@ def search_github_repos(query_terms):
     user_input = input("Do you want to download the found repositories? (y/n): ")
 
     if user_input.lower() == 'y':
-        with open("new_templates.txt", "a") as file:  # Open in append mode
+        with open(new_templates_file, "a") as file:  # Open in append mode
             for repo in found_repos:
                 file.write(f"{repo}\n")
 
         print("Running getnucleitemplates.py...")
-        subprocess.run(["python3", "getnucleitemplates.py"])
+        subprocess.run(["python3", "getnucleitemplates.py", new_templates_file])
     
     user_input = input("\nDo you want to add the new found repositories to nuclei.txt? (y/n): ")
     if user_input.lower() == 'y':
