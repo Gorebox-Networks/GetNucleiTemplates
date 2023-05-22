@@ -8,13 +8,14 @@ from typing import List, Tuple
 import fileinput
 import shutil
 
+# Get the directory of this script
+script_dir = os.path.dirname(os.path.abspath(__file__))
 
 def read_urls_from_file(filepath: str) -> List[str]:
     """Read URLs from the provided text file, ignoring commented lines."""
     with open(filepath, 'r') as f:
         urls = f.readlines()
     return [url.strip() for url in urls if url.strip()]
-
 
 def is_url_valid(url: str) -> bool:
     """Check if the URL exists and is not a 404."""
@@ -24,10 +25,8 @@ def is_url_valid(url: str) -> bool:
     except requests.ConnectionError:
         return False
 
-
 def clone_repo(url: str, index: int) -> Tuple[bool, bool]:
     """Attempt to clone the repository from the given URL."""
-
     repo_name = url.split('/')[-1]  # Extract repository name
     repo_name = f"{repo_name}_{index}"  # Append index to make it unique
 
@@ -51,17 +50,18 @@ def clone_repo(url: str, index: int) -> Tuple[bool, bool]:
         print(f"Failed to clone {url}. Reason: {e}")
         return False, False
 
-
 def remove_empty_dirs() -> None:
     """Remove all empty directories in the current working directory."""
     for directory in os.listdir("."):
         if os.path.isdir(directory) and not os.listdir(directory):
             os.rmdir(directory)
 
-
 def main():
+    # Path to the nuclei.txt file
+    nuclei_path = os.path.join(script_dir, 'nuclei.txt')
+
     # Backup original nuclei.txt file before any modifications
-    shutil.copy2('nuclei.txt', 'nuclei.txt.bak')
+    shutil.copy2(nuclei_path, f'{nuclei_path}.bak')
 
     # Create a directory for the repositories if it doesn't exist
     if not os.path.exists("nuclei_templates"):
@@ -70,7 +70,7 @@ def main():
     # Change the current working directory
     os.chdir("nuclei_templates")
 
-    urls = read_urls_from_file('./nuclei.txt')
+    urls = read_urls_from_file(nuclei_path)
 
     # Initialize counters for the total, successful, and failed attempts
     total_attempts, successful_downloads, failed_downloads, invalid_urls = 0, 0, 0, 0
@@ -86,9 +86,9 @@ def main():
             successful_downloads += 1
         elif is_invalid:
             invalid_urls += 1
-            with open('./nuclei.txt', 'a') as f:  # Append mode
+            with open(nuclei_path, 'a') as f:  # Append mode
                 f.write(f"# {url}\n")  # Comment out the invalid url
-            with fileinput.FileInput('./nuclei.txt', inplace=True, backup='.bak') as file:
+            with fileinput.FileInput(nuclei_path, inplace=True, backup='.bak') as file:
                 for line in file:
                     if url in line:
                         print(line.replace(url, f"# {url}"), end='')
