@@ -1,6 +1,6 @@
 # Description
 
-This Python script allows users to automatically clone multiple GitHub repositories provided in a text file. It specifically caters to the use case where you have a list of GitHub URLs for Nuclei templates and you want to clone all of them in a directory.
+This set of Python scripts helps to automate the process of gathering and organizing various GitHub repositories which contain Nuclei templates. The first script, getnucleitemplates.py, clones repositories from a list in a text file, checks for validity of the URLs, handles any issues with gists or duplicates, and organizes the clones in a directory. The second script, searchmore.py, uses the GitHub API to search for additional repositories containing Nuclei templates, prompts the user if they wish to clone the discovered repositories, and adds them to the list.
 
 Nuclei is a project that allows you to customize scanning for specific vulnerabilities, and these templates are the definitions of those specific vulnerabilities. This script helps in automating the process of getting those templates.
 
@@ -15,15 +15,26 @@ Nuclei is a project that allows you to customize scanning for specific vulnerabi
 
 * Git: This script uses git commands to clone repositories. If you haven't installed git yet, you can download it from the official Git website.
 
-# Execution Instructions
+# Usage
 
-* Copy the Python code and save it as a Python file (for example, clone_nuclei_templates.py).
-* Prepare a text file that contains the list of GitHub repository URLs you want to clone. Each URL should be on a new line. Save this file as nuclei.txt in the same directory as your Python script.
-* Open a terminal and navigate to the directory where your Python script and nuclei.txt file are located.
-* Run the Python script using the following command:
+* Update the nuclei.txt file with the list of repositories you want to clone.
+* Run the getnucleitemplates.py script to clone the repositories. It will clone the repositories into a new nuclei_templates directory, ignore commented lines, and comment out any invalid URLs.
 
-  python clone_nuclei_templates.py
+  python3 getnucleitemplates.py
 
-The script will then clone each repository listed in the nuclei.txt file into a directory called nuclei_templates. If the nuclei_templates directory does not exist, the script will create it. If an error occurs while cloning a particular repository, the script will skip it and move to the next one, and the error will be printed to the console.
+* You will see a summary of the attempted downloads, successful downloads, failed downloads, ignored gists, and ignored invalid URLs. Any failed or invalid repository URLs will be commented out in nuclei.txt.
+* To find more repositories, run the searchmore.py script. This will search GitHub for repositories containing the string "nuclei-templates". It will handle pagination to ensure all possible repositories are found, and respect GitHub's rate limits.
 
-After the script finishes running, you should find your cloned repositories in the nuclei_templates directory.
+  python3 searchmore.py
+
+You will be presented with a summary of the found repositories. If you choose to download the found repositories, they will be added to the nuclei.txt file and getnucleitemplates.py will be executed to clone them.
+
+Please note that using the GitHub API may require a personal access token if you need to make a large number of requests. Refer to the GitHub API documentation for more information.
+
+# Notes
+
+The scripts will treat GitHub Gist links as invalid URLs and ignore them.
+
+The scripts check for the existence of repositories before attempting to clone them to avoid errors.
+
+For the searchmore.py script, the search terms are currently hard-coded. If you want to search for different terms, you will need to modify the script.
