@@ -38,3 +38,18 @@ The scripts will treat GitHub Gist links as invalid URLs and ignore them.
 The scripts check for the existence of repositories before attempting to clone them to avoid errors.
 
 For the searchmore.py script, the search terms are currently hard-coded. If you want to search for different terms, you will need to modify the script.
+
+IMPORTANT: This script now asks for your GitHub token in the terminal. Make sure to handle it carefully, as this token provides access to your GitHub account. Never share it with anyone and don't store it in a publicly accessible location. Consider using environment variables or a secure credential management system for storing sensitive information like this.
+
+You can generate a personal access token on GitHub by following these steps:
+
+1. In the upper-right corner of any page, click your profile photo, then click Settings.
+2. In the left sidebar, click Developer settings.
+3. In the left sidebar, click Personal access tokens.
+4. Click Generate new token.
+5. Give your token a descriptive name.
+6. Select the scopes you wish to grant to this token. To access public repositories, you do not need to check any boxes.
+7. Click Generate token.
+8. Copy the token to your clipboard. For security reasons, after you navigate off the page, you will not be able to see the token again.
+
+If you want to do an unauthenticated search on Github API, just press 'Enter' when requesting for the API token.
