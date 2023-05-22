@@ -4,6 +4,7 @@
 import os
 import git
 import requests
+import fileinput
 from typing import List, Tuple
 
 
@@ -11,7 +12,7 @@ def read_urls_from_file(filepath: str) -> List[str]:
     """Read URLs from the provided text file, ignoring commented lines."""
     with open(filepath, 'r') as f:
         urls = f.readlines()
-    return [url.strip() for url in urls]
+    return [url.strip() for url in urls if url.strip()]
 
 
 def is_url_valid(url: str) -> bool:
@@ -82,6 +83,10 @@ def main():
             invalid_urls += 1
             with open('../nuclei.txt', 'a') as f:  # Append mode
                 f.write(f"# {url}\n")  # Comment out the invalid url
+            with fileinput.FileInput('../nuclei.txt', inplace=True, backup='.bak') as file:
+                for line in file:
+                    if url in line:
+                        print(line.replace(url, f"# {url}"), end='')
         else:
             failed_downloads += 1
 
