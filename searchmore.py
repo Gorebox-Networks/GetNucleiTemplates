@@ -77,13 +77,14 @@ def search_github_repos(query_terms):
                 file.write(f"{repo}\n")
 
         print("Running getnucleitemplates.py...")
-        subprocess.run(["python3", "getnucleitemplates.py -f ", new_templates_file])
+        subprocess.run(["python3", "getnucleitemplates.py", "-f", new_templates_file])
     
-    user_input = input("\nDo you want to add the new found repositories to nuclei.txt? (y/n): ")
-    if user_input.lower() == 'y':
-        with open("nuclei.txt", "a") as file:
-            for repo in found_repos:
-                file.write(f"{repo}\n")
+    if found_repos:  # Only ask to add to nuclei.txt if there are new repositories found
+        user_input = input("\nDo you want to add the new found repositories to nuclei.txt? (y/n): ")
+        if user_input.lower() == 'y':
+            with open("nuclei.txt", "a") as file:
+                for repo in found_repos:
+                    file.write(f"{repo}\n")
 
 if __name__ == "__main__":
     search_terms = ["nuclei-templates", "nuclei-scripts", "nuclei-configs"]
