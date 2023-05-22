@@ -25,6 +25,11 @@ def is_url_valid(url: str) -> bool:
     except requests.ConnectionError:
         return False
 
+def requires_auth(url: str) -> bool:
+    """Check if the URL requires authentication."""
+    response = requests.get(url)
+    return response.status_code == 401
+
 def clone_repo(url: str, index: int) -> Tuple[bool, bool]:
     """Attempt to clone the repository from the given URL."""
     repo_name = url.split('/')[-1]  # Extract repository name
@@ -94,7 +99,11 @@ def main():
                     else:
                         f.write(line)
             continue
-
+        
+        if requires_auth(url):
+            print(f"URL requires authentication, skipping: {url}")
+            continue
+        
         success, _ = clone_repo(url, index)
 
         if success:
