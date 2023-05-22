@@ -8,6 +8,7 @@ from typing import List, Tuple
 import fileinput
 import shutil
 
+
 def read_urls_from_file(filepath: str) -> List[str]:
     """Read URLs from the provided text file, ignoring commented lines."""
     with open(filepath, 'r') as f:
@@ -50,11 +51,13 @@ def clone_repo(url: str, index: int) -> Tuple[bool, bool]:
         print(f"Failed to clone {url}. Reason: {e}")
         return False, False
 
+
 def remove_empty_dirs() -> None:
     """Remove all empty directories in the current working directory."""
     for directory in os.listdir("."):
         if os.path.isdir(directory) and not os.listdir(directory):
             os.rmdir(directory)
+
 
 def main():
     # Backup original nuclei.txt file before any modifications
@@ -67,7 +70,7 @@ def main():
     # Change the current working directory
     os.chdir("nuclei_templates")
 
-    urls = read_urls_from_file('nuclei.txt')
+    urls = read_urls_from_file('./nuclei.txt')
 
     # Initialize counters for the total, successful, and failed attempts
     total_attempts, successful_downloads, failed_downloads, invalid_urls = 0, 0, 0, 0
@@ -83,9 +86,9 @@ def main():
             successful_downloads += 1
         elif is_invalid:
             invalid_urls += 1
-            with open('nuclei.txt', 'a') as f:  # Append mode
+            with open('./nuclei.txt', 'a') as f:  # Append mode
                 f.write(f"# {url}\n")  # Comment out the invalid url
-            with fileinput.FileInput('nuclei.txt', inplace=True, backup='.bak') as file:
+            with fileinput.FileInput('./nuclei.txt', inplace=True, backup='.bak') as file:
                 for line in file:
                     if url in line:
                         print(line.replace(url, f"# {url}"), end='')
