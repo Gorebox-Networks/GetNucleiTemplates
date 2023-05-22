@@ -58,7 +58,7 @@ def remove_empty_dirs() -> None:
 
 def main():
     # Backup original nuclei.txt file before any modifications
-    shutil.copy2('../nuclei.txt', '../nuclei.txt.bak')
+    shutil.copy2('nuclei.txt', 'nuclei.txt.bak')
 
     # Create a directory for the repositories if it doesn't exist
     if not os.path.exists("nuclei_templates"):
@@ -67,7 +67,7 @@ def main():
     # Change the current working directory
     os.chdir("nuclei_templates")
 
-    urls = read_urls_from_file('../nuclei.txt')
+    urls = read_urls_from_file('nuclei.txt')
 
     # Initialize counters for the total, successful, and failed attempts
     total_attempts, successful_downloads, failed_downloads, invalid_urls = 0, 0, 0, 0
@@ -83,9 +83,9 @@ def main():
             successful_downloads += 1
         elif is_invalid:
             invalid_urls += 1
-            with open('../nuclei.txt', 'a') as f:  # Append mode
+            with open('nuclei.txt', 'a') as f:  # Append mode
                 f.write(f"# {url}\n")  # Comment out the invalid url
-            with fileinput.FileInput('../nuclei.txt', inplace=True, backup='.bak') as file:
+            with fileinput.FileInput('nuclei.txt', inplace=True, backup='.bak') as file:
                 for line in file:
                     if url in line:
                         print(line.replace(url, f"# {url}"), end='')
