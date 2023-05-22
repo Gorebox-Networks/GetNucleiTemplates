@@ -69,22 +69,25 @@ def search_github_repos(query_terms):
         search_params['page'] += 1
 
     print(f"\nFound {len(found_repos)} new Nuclei Template repositories.")
-    user_input = input("Do you want to download the found repositories? (y/n): ")
-
-    if user_input.lower() == 'y':
-        with open(new_templates_file, "a") as file:  # Open in append mode
-            for repo in found_repos:
-                file.write(f"{repo}\n")
-
-        print("Running getnucleitemplates.py...")
-        subprocess.run(["python3", "getnucleitemplates.py", "-f", new_templates_file])
     
-    if found_repos:  # Only ask to add to nuclei.txt if there are new repositories found
+    if found_repos:  # check if found_repos is not empty
+        user_input = input("Do you want to download the found repositories? (y/n): ")
+
+        if user_input.lower() == 'y':
+            with open(new_templates_file, "a") as file:  # Open in append mode
+                for repo in found_repos:
+                    file.write(f"{repo}\n")
+
+            print("Running getnucleitemplates.py...")
+            subprocess.run(["python3", "getnucleitemplates.py -f ", new_templates_file])
+        
         user_input = input("\nDo you want to add the new found repositories to nuclei.txt? (y/n): ")
         if user_input.lower() == 'y':
             with open("nuclei.txt", "a") as file:
                 for repo in found_repos:
                     file.write(f"{repo}\n")
+    else:
+        print("No new repositories found.")
 
 if __name__ == "__main__":
     search_terms = ["nuclei-templates", "nuclei-scripts", "nuclei-configs"]
