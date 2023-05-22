@@ -6,6 +6,7 @@ import git
 import requests
 from typing import List, Tuple
 import shutil
+import argparse  # added import for argument parsing
 
 # Get the directory of this script
 script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -52,11 +53,16 @@ def remove_empty_dirs() -> None:
             os.rmdir(directory)
 
 def main():
-    # Path to the nuclei.txt file
-    nuclei_path = os.path.join(script_dir, 'nuclei.txt')
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-f", "--file", default="nuclei.txt",
+                        help="Filename to read the repositories from. Default is 'nuclei.txt'")
+    args = parser.parse_args()
 
-    # Backup original nuclei.txt file before any modifications
-    shutil.copy2(nuclei_path, f'{nuclei_path}.bak')
+    # Path to the file
+    filepath = os.path.join(script_dir, args.file)  # used the filename provided as argument
+
+    # Backup original file before any modifications
+    shutil.copy2(filepath, f'{filepath}.bak')
 
     # Create a directory for the repositories if it doesn't exist
     if not os.path.exists("nuclei_templates"):
@@ -65,7 +71,7 @@ def main():
     # Change the current working directory
     os.chdir("nuclei_templates")
 
-    urls = read_urls_from_file(nuclei_path)
+    urls = read_urls_from_file(filepath)
 
     # Initialize counters for the total, successful, and failed attempts
     total_attempts, successful_downloads, failed_downloads, invalid_urls = 0, 0, 0, 0
@@ -79,9 +85,9 @@ def main():
         if not is_url_valid(url):
             print(f"URL not valid: {url}")
             invalid_urls += 1
-            with open(nuclei_path, 'r') as f:
+            with open(filepath, 'r') as f:
                 lines = f.readlines()
-            with open(nuclei_path, 'w') as f:
+            with open(filepath, 'w') as f:
                 for line in lines:
                     if line.strip() == url:
                         f.write(f"# {url}\n")  # Comment out the invalid url
@@ -103,7 +109,6 @@ def main():
     print(f"Successful downloads: {successful_downloads}")
     print(f"Failed downloads: {failed_downloads}")
     print(f"Ignored invalid URLs: {invalid_urls}")
-
 
 if __name__ == "__main__":
     main()
