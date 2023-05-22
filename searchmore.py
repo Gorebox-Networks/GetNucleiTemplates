@@ -6,6 +6,7 @@ import json
 import time
 import os
 import subprocess
+import shutil
 
 def search_github_repos(query_terms):
     base_url = "https://api.github.com"
@@ -18,8 +19,9 @@ def search_github_repos(query_terms):
 
     found_repos = []
 
-    with open("nuclei.txt", "r") as file:
-        existing_repos = set(line.strip() for line in file.readlines())
+    shutil.copy("nuclei.txt", "nuclei.txt.bak")
+    with open("nuclei.txt.bak", "r") as file:
+        existing_repos = set(line.strip() for line in file.readlines() if line.strip() and not line.startswith("#"))
 
     while True:
         response = requests.get(search_url, headers=headers, params=search_params)
@@ -63,7 +65,7 @@ def search_github_repos(query_terms):
     user_input = input("Do you want to download the found repositories? (y/n): ")
 
     if user_input.lower() == 'y':
-        with open("nuclei.txt", "a") as file:
+        with open("nuclei.txt", "a") as file:  # Open in append mode
             for repo in found_repos:
                 file.write(f"{repo}\n")
 
