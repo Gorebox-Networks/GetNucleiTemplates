@@ -8,6 +8,11 @@ import os
 import subprocess
 import shutil
 
+def debug_log(msg: str, debug: bool):
+    """Log the given message if debug is True."""
+    if debug:
+        print(msg)
+
 def search_github_repos(query_terms):
     base_url = "https://api.github.com"
     token = input("Please enter your GitHub API token (press 'Enter' for unauthenticated): ")
@@ -16,6 +21,8 @@ def search_github_repos(query_terms):
         headers['Authorization'] = f'token {token}'
     search_url = f"{base_url}/search/repositories"
     search_params = {'q': ' OR '.join(query_terms), 'page': 1}
+        
+    debug_log(f"Searching repositories with terms: {query_terms}", debug)
 
     found_repos = []
 
@@ -31,7 +38,11 @@ def search_github_repos(query_terms):
         new_templates_repos = set(line.strip() for line in file.readlines() if line.strip() and not line.startswith("#"))
 
     while True:
+        debug_log(f"Sending GET request to: {search_url}", debug)
+
         response = requests.get(search_url, headers=headers, params=search_params)
+
+        debug_log(f"Received response with status code: {response.status_code}", debug)
 
         if response.status_code != 200:
             print(f"Error with status code: {response.status_code}")
@@ -61,6 +72,7 @@ def search_github_repos(query_terms):
                 repo_url = repo['html_url']
                 if repo_url not in existing_repos and repo_url not in new_templates_repos:
                     print(f"Found New Nuclei Template Repo: {repo_url}")
+                    debug_log(f"Adding {repo_url} to found repositories", debug)
                     found_repos.append(repo_url)
 
         if 'next' not in response.links:
@@ -90,5 +102,8 @@ def search_github_repos(query_terms):
         print("No new repositories found.")
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-d", "--debug", help="Enable debug logging", action="store_true")
+    args = parser.parse_args()
     search_terms = ["nuclei-templates", "nuclei-scripts", "nuclei-configs"]
-    search_github_repos(search_terms)
+    search_github_repos(search_terms, debug=args.debug)
