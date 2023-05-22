@@ -7,6 +7,7 @@ import time
 import os
 import subprocess
 import shutil
+import argparse
 
 def debug_log(msg: str, debug: bool):
     """Log the given message if debug is True."""
