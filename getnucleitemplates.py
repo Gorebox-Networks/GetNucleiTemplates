@@ -5,7 +5,6 @@ import os
 import git
 import requests
 from typing import List, Tuple
-import fileinput
 import shutil
 
 # Get the directory of this script
@@ -29,10 +28,6 @@ def clone_repo(url: str, index: int) -> Tuple[bool, bool]:
     """Attempt to clone the repository from the given URL."""
     repo_name = url.split('/')[-1]  # Extract repository name
     repo_name = f"{repo_name}_{index}"  # Append index to make it unique
-
-    if not is_url_valid(url):
-        print(f"URL not valid: {url}")
-        return False, True
 
     try:
         print(f"Cloning {url} into {repo_name}")
@@ -80,18 +75,24 @@ def main():
             continue
 
         total_attempts += 1
-        success, is_invalid = clone_repo(url, index)
+
+        if not is_url_valid(url):
+            print(f"URL not valid: {url}")
+            invalid_urls += 1
+            with open(nuclei_path, 'r') as f:
+                lines = f.readlines()
+            with open(nuclei_path, 'w') as f:
+                for line in lines:
+                    if line.strip() == url:
+                        f.write(f"# {url}\n")  # Comment out the invalid url
+                    else:
+                        f.write(line)
+            continue
+
+        success, _ = clone_repo(url, index)
 
         if success:
             successful_downloads += 1
-        elif is_invalid:
-            invalid_urls += 1
-            with open(nuclei_path, 'a') as f:  # Append mode
-                f.write(f"# {url}\n")  # Comment out the invalid url
-            with fileinput.FileInput(nuclei_path, inplace=True, backup='.bak') as file:
-                for line in file:
-                    if url in line:
-                        print(line.replace(url, f"# {url}"), end='')
         else:
             failed_downloads += 1
 
