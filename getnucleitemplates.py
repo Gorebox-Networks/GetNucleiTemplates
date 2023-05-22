@@ -6,6 +6,7 @@ import git
 import requests
 from typing import List, Tuple
 import fileinput
+import shutil
 
 def read_urls_from_file(filepath: str) -> List[str]:
     """Read URLs from the provided text file, ignoring commented lines."""
@@ -55,8 +56,10 @@ def remove_empty_dirs() -> None:
         if os.path.isdir(directory) and not os.listdir(directory):
             os.rmdir(directory)
 
-
 def main():
+    # Backup original nuclei.txt file before any modifications
+    shutil.copy2('../nuclei.txt', '../nuclei.txt.bak')
+
     # Create a directory for the repositories if it doesn't exist
     if not os.path.exists("nuclei_templates"):
         os.makedirs("nuclei_templates")
