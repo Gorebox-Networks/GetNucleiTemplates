@@ -8,6 +8,11 @@ import os
 import subprocess
 import shutil
 import argparse
+import getpass
+from colorama import Fore, Style, init
+
+# Initialize colorama
+init(autoreset=True)
 
 def debug_log(msg: str, debug: bool):
     """Log the given message if debug is True."""
@@ -16,14 +21,14 @@ def debug_log(msg: str, debug: bool):
 
 def search_github_repos(query_terms, debug=False):
     base_url = "https://api.github.com"
-    token = input("Please enter your GitHub API token (press 'Enter' for unauthenticated): ")
+    token = getpass.getpass(f"{Fore.GREEN}Please enter your GitHub API token (press 'Enter' for unauthenticated):{Style.RESET_ALL}")
     headers = {'Accept': 'application/vnd.github.v3+json'}
     if token.strip():  # If the user provided a token
         headers['Authorization'] = f'token {token}'
     search_url = f"{base_url}/search/repositories"
     search_params = {'q': ' OR '.join(query_terms), 'page': 1}
         
-    debug_log(f"Searching repositories with terms: {query_terms}", debug)
+    debug_log(f"{Fore.BLUE}Searching repositories with terms: {Fore.GREEN}{query_terms}{Style.RESET_ALL}", debug)
 
     found_repos = []
 
@@ -39,14 +44,14 @@ def search_github_repos(query_terms, debug=False):
         new_templates_repos = set(line.strip() for line in file.readlines() if line.strip() and not line.startswith("#"))
 
     while True:
-        debug_log(f"Sending GET request to: {search_url}", debug)
+        debug_log(f"{Fore.BLUE}[+] Sending GET request to: {Fore.MAGENTA}{search_url}{Style.RESET_ALL}", debug)
 
         response = requests.get(search_url, headers=headers, params=search_params)
 
-        debug_log(f"Received response with status code: {response.status_code}", debug)
+        debug_log(f"{Fore.BLUE}[+] Received response with status code: {Fore.GREEN}{response.status_code}{Style.RESET_ALL}", debug)
 
         if response.status_code != 200:
-            print(f"Error with status code: {response.status_code}")
+            print(f"{Fore.RED}[-] Error with status code: {Fore.RED}{response.status_code}{Style.RESET_ALL}")
             return
 
         rate_limit_remaining = int(response.headers.get('X-RateLimit-Remaining', 0))
@@ -55,7 +60,7 @@ def search_github_repos(query_terms, debug=False):
         if rate_limit_remaining < 10:  # adjust the number as needed
             reset_time = rate_limit_reset - time.time()
             if reset_time > 0:
-                print(f"Approaching rate limit. Sleeping for {reset_time} seconds.")
+                print(f"{Fore.LIGHTRED_EX}[-] Approaching rate limit. Sleeping for {Fore.LIGHTGREEN_EX}{reset_time}{Style.RESET_ALL} seconds.")
                 time.sleep(reset_time)
 
         data = response.json()
@@ -72,8 +77,8 @@ def search_github_repos(query_terms, debug=False):
             if any(file['name'].endswith(('.yaml', '.yml')) for file in contents):
                 repo_url = repo['html_url']
                 if repo_url not in existing_repos and repo_url not in new_templates_repos:
-                    print(f"Found New Nuclei Template Repo: {repo_url}")
-                    debug_log(f"Adding {repo_url} to found repositories", debug)
+                    print(f"{Fore.GREEN}[+] Found New Nuclei Template Repo: {Fore.MAGENTA}{repo_url}{Style.RESET_ALL}")
+                    debug_log(f"{Fore.GREEN}[+] Adding {Fore.MAGENTA}{repo_url}{Style.RESET_ALL} to found repositories", debug)
                     found_repos.append(repo_url)
 
         if 'next' not in response.links:
@@ -81,26 +86,26 @@ def search_github_repos(query_terms, debug=False):
 
         search_params['page'] += 1
 
-    print(f"\nFound {len(found_repos)} new Nuclei Template repositories.")
+    print(f"\n{Fore.GREEN}[+] Found {len(found_repos)} new Nuclei Template repositories.{Style.RESET_ALL}")
     
     if found_repos:  # check if found_repos is not empty
-        user_input = input("Do you want to download the found repositories? (y/n): ")
+        user_input = input(f"{Fore.BLUE}[*] Do you want to download the found repositories? (y/n): {Style.RESET_ALL}")
 
         if user_input.lower() == 'y':
             with open(new_templates_file, "a") as file:  # Open in append mode
                 for repo in found_repos:
                     file.write(f"{repo}\n")
 
-            print("Running getnucleitemplates.py...")
+            print(f"{Fore.GREEN}[+] Running getnucleitemplates.py...{Style.RESET_ALL}")
             subprocess.run(["python3", "getnucleitemplates.py", "-f", new_templates_file])
         
-        user_input = input("\nDo you want to add the new found repositories to nuclei.txt? (y/n): ")
+        user_input = input(f"\n{Fore.BLUE}[*] Do you want to add the new found repositories to nuclei.txt? (y/n): {Style.RESET_ALL}")
         if user_input.lower() == 'y':
             with open("nuclei.txt", "a") as file:
                 for repo in found_repos:
                     file.write(f"{repo}\n")
     else:
-        print("No new repositories found.")
+        print(f"{Fore.LIGHTRED_EX}[-] No new repositories found.{Style.RESET_ALL}")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
