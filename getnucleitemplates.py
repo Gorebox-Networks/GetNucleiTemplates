@@ -8,9 +8,16 @@ from typing import List, Tuple
 import shutil
 import argparse
 from colorama import Fore, Back, Style
+from dotenv import load_dotenv, set_key
+import getpass
 
 # Get the directory of this script
 script_dir = os.path.dirname(os.path.abspath(__file__))
+
+load_dotenv()
+
+# Clear the screen
+os.system('cls' if os.name == 'nt' else 'clear')
 
 # Add colorama initializations
 print(Style.RESET_ALL)
@@ -21,9 +28,18 @@ fail_color = Fore.RED
 
 def read_urls_from_file(filepath: str) -> List[str]:
     """Read URLs from the provided text file, ignoring commented lines."""
+    open(filepath, 'a').close()
     with open(filepath, 'r') as f:
         urls = f.readlines()
     return [url.strip() for url in urls if url.strip()]
+
+def get_github_api_key():
+    """Gets Github API key from .env file or user input."""
+    api_key = os.getenv('GITHUB_API_KEY')
+    if not api_key:
+        api_key = getpass.getpass(f"{Fore.GREEN}Enter your Github API Key (or press 'Enter' for unauthenticated search): {Style.RESET_ALL}")
+        set_key(".env", "GITHUB_API_KEY", api_key)
+    return api_key
 
 def is_url_valid(url: str) -> bool:
     """Check if the URL exists and is not a 404."""
@@ -33,10 +49,11 @@ def is_url_valid(url: str) -> bool:
     except requests.ConnectionError:
         return False
 
-def requires_auth(url: str) -> bool:
+def requires_auth(url: str, api_key: str) -> bool:
     """Check if the URL requires authentication."""
-    response = requests.get(url)
-    return response.status_code == 401
+    headers = {'Authorization': f'token {api_key}'}
+    response = requests.get(url, headers=headers)
+    return response.status_code == 403
 
 def clone_repo(url: str, index: int) -> Tuple[bool, bool]:
     """Attempt to clone the repository from the given URL."""
@@ -49,7 +66,6 @@ def clone_repo(url: str, index: int) -> Tuple[bool, bool]:
 
     try:
         print(f"{success_prefix} Cloning {url_color}{url}{Style.RESET_ALL} into {repo_name}")
-        # Clone the repository using a subprocess command instead of gitpython
         process = subprocess.Popen(
             ['git', 'clone', '--depth', '1', url, repo_name],
             env=dict(os.environ, GIT_TERMINAL_PROMPT='0'),  # Set GIT_TERMINAL_PROMPT=0
@@ -65,6 +81,7 @@ def clone_repo(url: str, index: int) -> Tuple[bool, bool]:
 
     except subprocess.CalledProcessError as e:
         print(f"{failure_prefix} Failed to clone {fail_color}{url}{Style.RESET_ALL}. Reason: {e}")
+        print(f"{Fore.RED}Please check the repository manually.{Style.RESET_ALL}")
         return False, False
 
 def remove_empty_dirs() -> None:
@@ -92,6 +109,8 @@ def main():
     # Change the current working directory
     os.chdir("nuclei_templates")
 
+    attempted_urls = read_urls_from_file('attempted.txt')
+
     urls = read_urls_from_file(filepath)
 
     # Initialize counters for the total, successful, and failed attempts
@@ -101,8 +120,10 @@ def main():
     num_repos = len(valid_urls)
     print(f"{Fore.BLUE}Cloning {num_repos} Nuclei templates repositories...{Style.RESET_ALL}")
 
+    api_key = get_github_api_key()
+
     for index, url in enumerate(urls):
-        if url.startswith('#'):  # ignore commented lines
+        if url.startswith('#') or url in attempted_urls:  # ignore commented lines
             continue
 
         total_attempts += 1
@@ -119,17 +140,23 @@ def main():
                     else:
                         f.write(line)
             continue
-        
-        if requires_auth(url):
-            print(f"{failure_prefix} URL requires authentication, skipping: {fail_color}{url}{Style.RESET_ALL}")
+
+        if requires_auth(url, api_key):
+            print(f"{failure_prefix} URL requires authentication or is a private repository, skipping: {fail_color}{url}{Style.RESET_ALL}")
             continue
-        
+
         success, _ = clone_repo(url, index)
+
+        attempted_urls.append(url)
 
         if success:
             successful_downloads += 1
         else:
             failed_downloads += 1
+
+    with open('attempted.txt', 'w') as f:
+        for url in attempted_urls:
+            f.write(url + '\n')
 
     remove_empty_dirs()
 
