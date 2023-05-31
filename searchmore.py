@@ -10,9 +10,13 @@ import shutil
 import argparse
 import getpass
 from colorama import Fore, Style, init
+from dotenv import load_dotenv
 
 # Initialize colorama
 init(autoreset=True)
+
+# Clear the screen
+os.system('cls' if os.name == 'nt' else 'clear')
 
 def debug_log(msg: str, debug: bool):
     """Log the given message if debug is True."""
@@ -21,7 +25,7 @@ def debug_log(msg: str, debug: bool):
 
 def search_github_repos(query_terms, debug=False):
     base_url = "https://api.github.com"
-    token = getpass.getpass(f"{Fore.GREEN}Please enter your GitHub API token (press 'Enter' for unauthenticated):{Style.RESET_ALL}")
+    token = os.getenv('GITHUB_API_TOKEN')  # Read the token from environment variable
     headers = {'Accept': 'application/vnd.github.v3+json'}
     if token.strip():  # If the user provided a token
         headers['Authorization'] = f'token {token}'

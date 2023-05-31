@@ -26,6 +26,8 @@ failure_prefix = f"{Fore.RED}[-]{Style.RESET_ALL}"
 url_color = Fore.YELLOW
 fail_color = Fore.RED
 
+info_color = Fore.CYAN
+
 def read_urls_from_file(filepath: str) -> List[str]:
     """Read URLs from the provided text file, ignoring commented lines."""
     open(filepath, 'a').close()
@@ -61,8 +63,8 @@ def clone_repo(url: str, index: int) -> Tuple[bool, bool]:
     repo_name = f"{repo_name}_{index}"  # Append index to make it unique
 
     if os.path.exists(repo_name):
-        print(f"{Fore.RED}[-] {Style.RESET_ALL}{Fore.YELLOW}Repository {repo_name} already exists. Skipping.{Style.RESET_ALL}")
-        return False, False
+        print(f"{info_color}Repository {repo_name} already exists. Skipping.{Style.RESET_ALL}")
+        return False, True
 
     try:
         print(f"{success_prefix} Cloning {url_color}{url}{Style.RESET_ALL} into {repo_name}")
@@ -122,6 +124,8 @@ def main():
 
     api_key = get_github_api_key()
 
+    all_repos_exist = True
+
     for index, url in enumerate(urls):
         if url.startswith('#') or url in attempted_urls:  # ignore commented lines
             continue
@@ -145,13 +149,14 @@ def main():
             print(f"{failure_prefix} URL requires authentication or is a private repository, skipping: {fail_color}{url}{Style.RESET_ALL}")
             continue
 
-        success, _ = clone_repo(url, index)
+        success, exists = clone_repo(url, index)
 
         attempted_urls.append(url)
 
         if success:
             successful_downloads += 1
-        else:
+        elif not exists:
+            all_repos_exist = False
             failed_downloads += 1
 
     with open('attempted.txt', 'w') as f:
@@ -166,6 +171,8 @@ def main():
     print(f"{failure_prefix} Failed downloads: {failed_downloads}")
     print(f"{failure_prefix} Ignored invalid URLs: {invalid_urls}")
 
+    if all_repos_exist and successful_downloads == 0 and failed_downloads == 0:
+        print(f"{Fore.GREEN}All repositories from the list are already downloaded!{Style.RESET_ALL}")
 
 if __name__ == "__main__":
     main()
