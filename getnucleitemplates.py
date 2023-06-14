@@ -62,6 +62,8 @@ def clone_and_validate_repo(url: str, index: int, dir: str) -> Tuple[bool, bool]
     not_validated_dir = os.path.join(dir, "not-validated")
     failed_clones_file_path = os.path.join(dir, "failed_clones.txt")
 
+    clone_success, validation_success = False, False
+
     # Check if the main directory exists, if not - create it
     if not os.path.exists(dir):
         os.makedirs(dir)
@@ -73,7 +75,7 @@ def clone_and_validate_repo(url: str, index: int, dir: str) -> Tuple[bool, bool]
 
     if os.path.exists(repo_name):
         print(f"{info_color}Repository {repo_name} already exists. Skipping.{Style.RESET_ALL}")
-        return False, True
+        return False, False
 
     try:
         print(f"{success_prefix} Cloning {url_color}{url}{Style.RESET_ALL} into {repo_name}")
@@ -91,6 +93,7 @@ def clone_and_validate_repo(url: str, index: int, dir: str) -> Tuple[bool, bool]
             print(f"{Fore.GREEN}[+] Successful cloning {url}{Style.RESET_ALL}")
             with open(os.path.join(validated_dir, "validated.txt"), "a") as validated_file:
                 validated_file.write(f"{timestamp} - {url}\n")
+            clone_success = True
 
         # Validate repository
         print(f"{success_prefix} Validating {url_color}{url}{Style.RESET_ALL} using 'nuclei -validate'")
@@ -106,11 +109,10 @@ def clone_and_validate_repo(url: str, index: int, dir: str) -> Tuple[bool, bool]
             shutil.move(repo_name, not_validated_dir)
             with open(os.path.join(not_validated_dir, "not-validated.txt"), "a") as not_validated_file:
                 not_validated_file.write(f"{timestamp} - {url}\n")
-            return False, False
         else:
             print(f"{Fore.GREEN}[+] Successful validation {url}{Style.RESET_ALL}")
             shutil.move(repo_name, validated_dir)
-            return True, False
+            validation_success = True
 
     except subprocess.CalledProcessError as e:
         print(f"{Fore.RED}[-] Failed cloning repo {url}. Reason: {e}{Style.RESET_ALL}")
@@ -118,7 +120,8 @@ def clone_and_validate_repo(url: str, index: int, dir: str) -> Tuple[bool, bool]
             open(failed_clones_file_path, 'w').close()
         with open(failed_clones_file_path, "a") as failed_file:
             failed_file.write(f"{timestamp} - {url}\n")
-        return False, False
+
+    return clone_success, validation_success
 
 def remove_empty_dirs(dir: str) -> None:
     """Remove all empty directories in the given directory."""
@@ -155,61 +158,48 @@ def main():
     urls = read_urls_from_file(filepath)
 
     total_attempts, successful_downloads, failed_downloads, invalid_urls = 0, 0, 0, 0
+    successful_validations, failed_validations = 0, 0
 
     valid_urls = [url for url in urls if not url.startswith('#')]
-    num_repos = len(valid_urls)
-    print(f"{Fore.BLUE}Cloning {num_repos} Nuclei templates repositories...{Style.RESET_ALL}")
+    invalid_urls += len(urls) - len(valid_urls)
 
-    api_key = get_github_api_key()
-
-    all_repos_exist = True
-
-    for index, url in enumerate(urls):
-        if url.startswith('#') or url in attempted_urls:  # ignore commented lines
-            continue
-
+    for index, url in enumerate(valid_urls):
         total_attempts += 1
+        print(f"\n{info_color}--- Repository {total_attempts} ---{Style.RESET_ALL}")
+
+        if url in attempted_urls:
+            print(f"{info_color}URL {url_color}{url}{Style.RESET_ALL} already cloned. Skipping.")
+            continue
 
         if not is_url_valid(url):
-            print(f"{failure_prefix} URL not valid: {fail_color}{url}{Style.RESET_ALL}")
+            print(f"{fail_color}Invalid URL: {url}{Style.RESET_ALL}")
             invalid_urls += 1
-            with open(filepath, 'r') as f:
-                lines = f.readlines()
-            with open(filepath, 'w') as f:
-                for line in lines:
-                    if line.strip() == url:
-                        f.write(f"# {url}\n")  # Comment out the invalid url
-                    else:
-                        f.write(line)
             continue
 
-        if requires_auth(url, api_key):
-            print(f"{failure_prefix} URL requires authentication or is a private repository, skipping: {fail_color}{url}{Style.RESET_ALL}")
-            continue
+        clone_success, validation_success = clone_and_validate_repo(url, index, dir)
 
-        success, exists = clone_and_validate_repo(url, index, ".")
-
-        attempted_urls.append(url)
-
-        if success:
+        if clone_success:
             successful_downloads += 1
-        elif not exists:
-            all_repos_exist = False
+        else:
             failed_downloads += 1
 
-    with open('attempted.txt', 'w') as f:
-        for url in attempted_urls:
-            f.write(url + '\n')
+        if validation_success:
+            successful_validations += 1
+        else:
+            failed_validations += 1
+
+        with open('attempted.txt', 'a') as f:
+            f.write(f"{url}\n")
+
+    print(f"\n{info_color}---- Summary ----")
+    print(f"{info_color}Total URLs attempted: {total_attempts}")
+    print(f"{success_prefix} Successfully downloaded: {successful_downloads}")
+    print(f"{failure_prefix} Failed to download: {failed_downloads}")
+    print(f"{info_color}Invalid URLs: {invalid_urls}")
+    print(f"{success_prefix} Successfully validated: {successful_validations}")
+    print(f"{failure_prefix} Failed to validate: {failed_validations}{Style.RESET_ALL}")
 
     remove_empty_dirs(dir)
-
-    print(f"\nTotal attempted downloads: {total_attempts}")
-    print(f"{success_prefix} Successful downloads: {successful_downloads}")
-    print(f"{failure_prefix} Failed downloads: {failed_downloads}")
-    print(f"{failure_prefix} Ignored invalid URLs: {invalid_urls}")
-
-    if all_repos_exist and successful_downloads == 0 and failed_downloads == 0:
-        print(f"{Fore.GREEN}All repositories from the list are already downloaded!{Style.RESET_ALL}")
 
 if __name__ == "__main__":
     main()
