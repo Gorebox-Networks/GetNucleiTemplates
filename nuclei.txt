@@ -186,3 +186,4 @@ https://github.com/yavolo/nuclei-templates
 https://github.com/z3bd/nuclei-templates
 https://github.com/zer0yu/Open-PoC
 https://github.com/zinminphyo0/KozinTemplates
+https://github.com/vsh00t/nuclei-templates
