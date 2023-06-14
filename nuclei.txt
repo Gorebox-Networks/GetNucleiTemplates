@@ -1,188 +1,131 @@
-# https://github.com/0XParthJ/Nuclei-Templates
-# https://github.com/1dayluo/My-Nuclei-Templates
-# https://github.com/Aituglo/nuclei-templates
-# https://github.com/ChiaraNRTT96/BountySkill
-# https://github.com/Linuxinet/nuclei-templates
-# https://github.com/Nithissh0708/Custom-Nuclei-Templates
-# https://github.com/abbycantcode/Nuclei-Template
-# https://github.com/foulenzer/foulenzer-templates
-# https://github.com/joanbono/nuclei-templates
-# https://github.com/pacho15/mynuclei_templates
-# https://github.com/themastersunil/Nuclei-TamplatesBackup.git
-# https://github.com/themastersunil/nucleiDB
-# https://github.com/trungkay2/Nuclei-template
-https://gist.github.com/0x240x23elu
-https://gist.github.com/ResistanceIsUseless/e46848f67706a8aa1205c9d2866bff31
-https://github.com/0x727/ObserverWard_0x727
-https://github.com/0xAwali/Virtual-Host
-https://github.com/0xElkot/My-Nuclei-Templates
-https://github.com/0xPugazh/my-nuclei-templates
-https://github.com/0xmaximus/final_freaking_nuclei_templates
-https://github.com/10kHacktech/nuclei_templates
-https://github.com/1in9e/my-nuclei-templates
-https://github.com/2jung/nuclei-templates
-https://github.com/5cr1pt/templates
-https://github.com/ARPSyndicate/kenzer-templates
-https://github.com/Akokonunes/Private-Nuclei-Templates
-https://github.com/Arvinthksrct/alltemplate
-https://github.com/AshiqurEmon/nuclei_templates.git
-https://github.com/BeRserKerSec/CVE-2021-26084-Nuclei-template
-https://github.com/CharanRayudu/Custom-Nuclei-Templates
-https://github.com/ChristianWeiler/custom-nuclei-templates
-https://github.com/DoubleTakes/nuclei-templates
-https://github.com/Elsfa7-110/log4jNuclei
-https://github.com/Elsfa7-110/mynuclei-templates
-https://github.com/ExpLangcn/NucleiTP
-https://github.com/Facucuervo87/openssl-3.0.4-template
-https://github.com/GlennPegden2/misc-nuclei-scripts
-https://github.com/Hack4rLIFE/CVE-2022-42889
-https://github.com/Harish4948/Nuclei-Templates
-https://github.com/Hunt2behunter/nuclei-templates
-https://github.com/Jagomeiister/nuclei-templates
-https://github.com/JoshMorrison99/url-based-nuclei-templates
-https://github.com/Kaue-Navarro/Templates-kaue-nuclei
-https://github.com/KeepHowling/all_freaking_nuclei_templates
-https://github.com/Lopseg/nuclei-c-templates
-https://github.com/Lu3ky13/Authorization-Nuclei-Templates
-https://github.com/MR-pentestGuy/nuclei-templates
-https://github.com/MikeeI/nuclei-templates
-https://github.com/MrCl0wnLab/Nuclei-Template-CVE-2022-1388-BIG-IP-iControl-REST-Exposed
-https://github.com/MrCl0wnLab/Nuclei-Template-Exploit-F5-BIG-IP-iControl-REST-Auth-Bypass-RCE-Command-Parameter
-https://github.com/NightRang3r/misc_nuclei_templates
-https://github.com/NitinYadav00/My-Nuclei-Templates
-https://github.com/Odayex/Random-Nuclei-Templates
-https://github.com/PedroFerreira97/nuclei_templates
-https://github.com/R-s0n/Custom_Vuln_Scan_Templates
-https://github.com/Saboor-Hakimi/CVE-2023-23752
-https://github.com/Saimonkabir/Nuclei-Templates
-https://github.com/Saptak9983/Nuclei-Template
-https://github.com/SecTheBit/CVE-2022-1388
-https://github.com/ShangRui-hash/my-nuclei-templates
-https://github.com/SirAppSec/nuclei-template-generator-log4j
-https://github.com/Str1am/my-nuclei-templates
-https://github.com/SumedhDawadi/Custom-Nuclei-Template
-https://github.com/System00-Security/backflow
-https://github.com/T4t4ru/nuclei-templates
-https://github.com/V0idC0de/dir-listing-iis-test
-https://github.com/adampielak/nuclei-templates
-https://github.com/aels/CVE-2022-37042
-https://github.com/akincibor/CVE-2022-27925
-https://github.com/al4xs/nuclei-templates
-https://github.com/alexrydzak/rydzak-nuclei-templates
-https://github.com/am0nt31r0/custom-nuclei-templates
-https://github.com/attacker-codeninja/My-Nuclei-Templates-2
-https://github.com/ayadim/Nuclei-bug-hunter
-https://github.com/badboy-sft/badboy_17-Nuclei-Templates-Collection
-https://github.com/bhataasim1/PersonalTemplates
-https://github.com/binod235/nuclei-templates-and-reports
-https://github.com/bjhulst/nuclei-custom-templates
-https://github.com/blazeinfosec/nuclei-templates
-https://github.com/brinhosa/brinhosa-nuclei-templates
-https://github.com/bufferbandit/gitScanNucleiTemplate
-https://github.com/bugbountydude/Nuclei-TamplatesBackup
-https://github.com/c-sh0/nuclei_templates
-https://github.com/c3l3si4n/malicious_nuclei_templates
-https://github.com/chouaibhm/foulenzer-templates
-https://github.com/cipher387/juicyinfo-nuclei-templates
-https://github.com/clarkvoss/Nuclei-Templates
-https://github.com/coldrainh/nuclei-ByMyself
-https://github.com/compr00t/nuclei-templates
-https://github.com/d3sca/Nuclei_Templates
-https://github.com/daffainfo/my-nuclei-templates
-https://github.com/damon-sec/Nuclei-templates-Collection
-https://github.com/dk4trin/templates-nuclei
-https://github.com/drfabiocastro/certwatcher-templates
-https://github.com/e1abrador/SpringCorePoC.sh
-https://github.com/ekinsb/Nuclei-Templates
-https://github.com/emadshanab/nucleiDB
-https://github.com/erickfernandox/nuclei-templates
-https://github.com/esetal/nuclei-bb-templates
-https://github.com/ethicalhackingplayground/erebus-templates
-https://github.com/geeknik/nuclei-templates-1
-https://github.com/geeknik/the-nuclei-templates
-https://github.com/glyptho/templatesallnuclei
-https://github.com/ibaiw/nuclei_templates
-https://github.com/im403/nuclei-temp
-https://github.com/javaongsan/nuclei-templates
-https://github.com/justmumu/SpringShell
-https://github.com/kabilan1290/templates
-https://github.com/kh4sh3i/CVE-2022-23131
-https://github.com/kh4sh3i/Nextcloud-Pentesting
-https://github.com/kh4sh3i/Webmin-CVE
-https://github.com/learnerboy88/CVE-2023-29489
-https://github.com/lliwi/nuclei-repo-hunter
-https://github.com/luck-ying/Library-YAML-POC
-https://github.com/manasmbellani/nuclei-templates
-https://github.com/marcositu/nuclei-custom-templates
-https://github.com/mastersir-lab/nuclei-yaml-poc
-https://github.com/mbskter/Masscan2Httpx2Nuclei-Xray
-https://github.com/medbsq/ncl
-https://github.com/meme-lord/Custom-Nuclei-Templates
-https://github.com/mertugur/nuclei-templates
-https://github.com/milo2012/nuclei-templates-others
-https://github.com/n1f2c3/mytemplates
-https://github.com/narasimha5x5/nuclei-templates
-https://github.com/notnotnotveg/nuclei-custom-templates
-https://github.com/nullfuzz-pentest/custom-nuclei-templates
-https://github.com/numanturle/CVE-2022-41040
-https://github.com/obreinx/nuceli-templates
-https://github.com/optiv/mobile-nuclei-templates
-https://github.com/p0ch4t/nuclei-special-templates
-https://github.com/p3n73st3r/Nuclei-Templates
-https://github.com/panch0r3d/nuclei-templates
-https://github.com/peanuth8r/Nuclei_Templates
-https://github.com/pentest-dev/Profesional-Nuclei-Templates
-https://github.com/pikpikcu/nuclei-templates
-https://github.com/ping-0day/templates
-https://github.com/praetorian-inc/chariot-launch-nuclei-templates
-https://github.com/psc4re/nuclei-templates
-https://github.com/ptyspawnbinbash/template-enhancer
-https://github.com/rafaelcaria/Nuclei-Templates
-https://github.com/rafaelwdornelas/my-nuclei-templates
-https://github.com/rahul-nakum14/Recon
-https://github.com/rahulkadavil/nuclei-templates
-https://github.com/randomstr1ng/nuclei-sap-templates
-https://github.com/redteambrasil/nuclei-templates
-https://github.com/ree4pwn/my-nuclei-templates
-https://github.com/ricardomaia/nuclei-template-generator-for-wordpress-plugins
-https://github.com/rutgerhrm/valid8
-https://github.com/sadnansakin/my-nuclei-templates
-https://github.com/samy1937/mynuclei_templates
-https://github.com/securitytest3r/nuclei_templates_work
-https://github.com/sharathkramadas/k8s-nuclei-templates
-https://github.com/shifa123/detections
-https://github.com/shubham-rooter/Nuclei-custom-templates
-https://github.com/sl4x0/NC-Templates
-https://github.com/smaranchand/nuclei-templates
-https://github.com/soapffz/myown-nuclei-poc
-https://github.com/soumya123raj/Nuclei
-https://github.com/souzomain/mytemplates
-https://github.com/sudouday/nuclei-templates
-https://github.com/sushant-kamble/mynuclei-template
-https://github.com/tamimhasan404/Open-Source-Nuclei-Templates-Downloader
-https://github.com/test502git/log4j-fuzz-head-poc
-https://github.com/testtt3424/nuclei-templates
-https://github.com/th3r4id/nuclei-templates
-https://github.com/thebrnwal/Content-Injection-Nuclei-Script
-https://github.com/thecyberneh/nuclei-templatess
-https://github.com/thecybertix/Nuclei-templates
-https://github.com/thelabda/nuclei-templates
-https://github.com/themoonbaba/private_templates
-https://github.com/topscoder/nuclei-wordfence-cve
-https://github.com/toramanemre/apache-solr-log4j-CVE-2021-44228
-https://github.com/toramanemre/log4j-rce-detect-waf-bypass
-https://github.com/trickest/log4j
-https://github.com/twseptian/custom-nuclei-templates
-https://github.com/vidocsecurity/templates
-https://github.com/vishal12300/all_nuclei_templatess
-https://github.com/vulnspace/nuclei-templates
-https://github.com/wasp76b/nuclei-templates
-https://github.com/websecresearch/nucleirecordloginsession
-https://github.com/windyGarlic/nuclei-templates
-https://github.com/wr00t/templates
-https://github.com/xinZa1/template
-https://github.com/yarovit-developer/nuclei-templates
-https://github.com/yavolo/nuclei-templates
-https://github.com/z3bd/nuclei-templates
-https://github.com/zer0yu/Open-PoC
-https://github.com/zinminphyo0/KozinTemplates
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+import requests
+import json
+import time
+import os
+import subprocess
+import shutil
+import argparse
+from colorama import Fore, Style, init
+from dotenv import load_dotenv
+
+# Initialize colorama
+init(autoreset=True)
+
+# Load environment variables from .env file
+load_dotenv()
+
+# Clear the screen
+# os.system('cls' if os.name == 'nt' else 'clear')
+
+def debug_log(msg: str, debug: bool):
+    """Log the given message if debug is True."""
+    if debug:
+        print(msg)
+
+def handle_response(response, debug):
+    """Handle the response from an API request."""
+    debug_log(f"{Fore.BLUE}[+] Received response with status code: {Fore.GREEN}{response.status_code}{Style.RESET_ALL}", debug)
+
+    if response.status_code != 200:
+        print(f"{Fore.RED}[-] Error with status code: {Fore.RED}{response.status_code}{Style.RESET_ALL}")
+        return False
+
+    rate_limit_remaining = int(response.headers.get('X-RateLimit-Remaining', 0))
+    rate_limit_reset = int(response.headers.get('X-RateLimit-Reset', 0))
+
+    if rate_limit_remaining < 10:  # adjust the number as needed
+        reset_time = rate_limit_reset - time.time()
+        if reset_time > 0:
+            print(f"{Fore.LIGHTRED_EX}[-] Approaching rate limit. Sleeping for {Fore.LIGHTGREEN_EX}{reset_time}{Style.RESET_ALL} seconds.")
+            time.sleep(reset_time)
+
+    return True
+
+def append_to_file(filename, data):
+    """Append data to a file."""
+    with open(filename, "a") as file:
+        for item in data:
+            file.write(f"{item}\n")
+
+def search_github_repos(query_terms, debug=False):
+    base_url = "https://api.github.com"
+    token = os.getenv('GITHUB_API_TOKEN', None)  # Read the token from environment variable or set to None if not found
+
+    headers = {'Accept': 'application/vnd.github.v3+json'}
+    if token and token.strip():
+        headers['Authorization'] = f'token {token}'
+
+    search_url = f"{base_url}/search/repositories"
+    search_params = {'q': ' OR '.join(query_terms), 'page': 1}
+
+    debug_log(f"{Fore.BLUE}Searching repositories with terms: {Fore.GREEN}{query_terms}{Style.RESET_ALL}", debug)
+
+    found_repos = []
+    new_templates_file = "new_templates.txt"
+
+    if not os.path.exists(new_templates_file):
+        with open(new_templates_file, 'w'): pass  # create the file if it doesn't exist
+
+    shutil.copy("nuclei.txt", "nuclei.txt.bak")
+    with open("nuclei.txt.bak", "r") as file:
+        existing_repos = set(line.strip() for line in file.readlines() if line.strip() and not line.startswith("#"))
+
+    with open(new_templates_file, "r") as file:
+        new_templates_repos = set(line.strip() for line in file.readlines() if line.strip() and not line.startswith("#"))
+
+    while True:
+        debug_log(f"{Fore.BLUE}[+] Sending GET request to: {Fore.MAGENTA}{search_url}{Style.RESET_ALL}", debug)
+
+        response = requests.get(search_url, headers=headers, params=search_params)
+
+        if not handle_response(response, debug):
+            return
+
+        data = response.json()
+
+        for repo in data["items"]:
+            # Check if repository contains .yaml or .yml files
+            contents_url = f"{base_url}/repos/{repo['full_name']}/contents"
+            contents_response = requests.get(contents_url, headers=headers)
+
+            if not handle_response(contents_response, debug):
+                continue
+
+            contents = contents_response.json()
+            if any(file['name'].endswith(('.yaml', '.yml')) for file in contents):
+                repo_url = repo['html_url']
+                if repo_url not in existing_repos and repo_url not in new_templates_repos:
+                    print(f"{Fore.GREEN}[+] Found New Nuclei Template Repo: {Fore.MAGENTA}{repo_url}{Style.RESET_ALL}")
+                    debug_log(f"{Fore.GREEN}[+] Adding {Fore.MAGENTA}{repo_url}{Style.RESET_ALL} to found repositories", debug)
+                    found_repos.append(repo_url)
+
+        if 'next' not in response.links:
+            break
+
+        search_params['page'] += 1
+
+    print(f"\n{Fore.GREEN}[+] Found {len(found_repos)} new Nuclei Template repositories.{Style.RESET_ALL}")
+
+    if found_repos:  # check if found_repos is not empty
+        user_input = input(f"{Fore.BLUE}[*] Do you want to download the found repositories? (y/n): {Style.RESET_ALL}")
+
+        if user_input.lower() == 'y':
+            append_to_file(new_templates_file, found_repos)
+            print(f"{Fore.GREEN}[+] Running getnucleitemplates.py...{Style.RESET_ALL}")
+            subprocess.run(["python3", "getnucleitemplates.py", "-f", new_templates_file])
+
+        user_input = input(f"\n{Fore.BLUE}[*] Do you want to add the new found repositories to nuclei.txt? (y/n): {Style.RESET_ALL}")
+        if user_input.lower() == 'y':
+            append_to_file("nuclei.txt", found_repos)
+
+    else:
+        print(f"{Fore.LIGHTRED_EX}[-] No new repositories found.{Style.RESET_ALL}")
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-d", "--debug", help="Enable debug logging", action="store_true")
+    args = parser.parse_args()
+    search_terms = ["nuclei-templates", "nuclei-scripts", "nuclei-configs"]
+    search_github_repos(search_terms, debug=args.debug)

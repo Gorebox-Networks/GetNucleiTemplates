@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # Author: David Espejo (Fortytwo Security)
 import os
-import subprocess  # Changed from git to subprocess
+import subprocess
 import requests
 from typing import List, Tuple
 import shutil
@@ -10,14 +10,14 @@ import argparse
 from colorama import Fore, Back, Style
 from dotenv import load_dotenv, set_key
 import getpass
+from urllib.parse import urlparse
 
 # Get the directory of this script
 script_dir = os.path.dirname(os.path.abspath(__file__))
-
 load_dotenv()
 
 # Clear the screen
-os.system('cls' if os.name == 'nt' else 'clear')
+# os.system('cls' if os.name == 'nt' else 'clear')
 
 # Add colorama initializations
 print(Style.RESET_ALL)
@@ -25,13 +25,14 @@ success_prefix = f"{Fore.GREEN}[+]{Style.RESET_ALL}"
 failure_prefix = f"{Fore.RED}[-]{Style.RESET_ALL}"
 url_color = Fore.YELLOW
 fail_color = Fore.RED
-
 info_color = Fore.CYAN
+
+# Create a session
+session = requests.Session()
 
 def read_urls_from_file(filepath: str) -> List[str]:
     """Read URLs from the provided text file, ignoring commented lines."""
-    open(filepath, 'a').close()
-    with open(filepath, 'r') as f:
+    with open(filepath, 'a+') as f:
         urls = f.readlines()
     return [url.strip() for url in urls if url.strip()]
 
@@ -46,7 +47,7 @@ def get_github_api_key():
 def is_url_valid(url: str) -> bool:
     """Check if the URL exists and is not a 404."""
     try:
-        response = requests.head(url, allow_redirects=True)
+        response = session.head(url, allow_redirects=True)
         return response.status_code != 404
     except requests.ConnectionError:
         return False
@@ -54,20 +55,20 @@ def is_url_valid(url: str) -> bool:
 def requires_auth(url: str, api_key: str) -> bool:
     """Check if the URL requires authentication."""
     headers = {'Authorization': f'token {api_key}'}
-    response = requests.get(url, headers=headers)
+    response = session.get(url, headers=headers)
     return response.status_code == 403
 
-def clone_repo(url: str, index: int) -> Tuple[bool, bool]:
-    """Attempt to clone the repository from the given URL."""
-    repo_name = url.split('/')[-1]  # Extract repository name
+def clone_and_validate_repo(url: str, index: int) -> Tuple[bool, bool, bool]:
+    """Attempt to clone and validate the repository from the given URL."""
+    repo_name = urlparse(url).path  # Extract repository name
     repo_name = f"{repo_name}_{index}"  # Append index to make it unique
 
     if os.path.exists(repo_name):
         print(f"{info_color}Repository {repo_name} already exists. Skipping.{Style.RESET_ALL}")
-        return False, True
+        return False, True, False
 
+    print(f"{success_prefix} Cloning {url_color}{url}{Style.RESET_ALL} into {repo_name}")
     try:
-        print(f"{success_prefix} Cloning {url_color}{url}{Style.RESET_ALL} into {repo_name}")
         process = subprocess.Popen(
             ['git', 'clone', '--depth', '1', url, repo_name],
             env=dict(os.environ, GIT_TERMINAL_PROMPT='0'),  # Set GIT_TERMINAL_PROMPT=0
@@ -79,100 +80,70 @@ def clone_repo(url: str, index: int) -> Tuple[bool, bool]:
         if process.returncode != 0:
             raise subprocess.CalledProcessError(process.returncode, 'git')
 
-        return True, False
+        print(f"{success_prefix} Validating {url_color}{url}{Style.RESET_ALL} using 'nuclei -validate'")
+        validate_process = subprocess.Popen(
+            ['nuclei', '-validate', '-t', repo_name],
+            stdout=subprocess.DEVNULL,  # Optional: Suppress stdout
+            stderr=subprocess.DEVNULL,  # Optional: Suppress stderr
+        )
+        validate_process.communicate()  # Wait for process to complete
 
-    except subprocess.CalledProcessError as e:
-        print(f"{failure_prefix} Failed to clone {fail_color}{url}{Style.RESET_ALL}. Reason: {e}")
-        print(f"{Fore.RED}Please check the repository manually.{Style.RESET_ALL}")
-        return False, False
+        if validate_process.returncode != 0:
+            raise subprocess.CalledProcessError(validate_process.returncode, 'nuclei')
 
-def remove_empty_dirs() -> None:
-    """Remove all empty directories in the current working directory."""
-    for directory in os.listdir("."):
-        if os.path.isdir(directory) and not os.listdir(directory):
-            os.rmdir(directory)
+        return True, True, True
+    except subprocess.CalledProcessError:
+        print(f"{failure_prefix} Failed to clone or validate {url_color}{url}{Style.RESET_ALL}.")
+        print(f"{info_color}Please check this repository manually.{Style.RESET_ALL}")
+        return False, True, False
 
+def move_to_folder(url: str, index: int, folder_name: str):
+    """Move cloned repository to the appropriate folder."""
+    repo_name = urlparse(url).path  # Extract repository name
+    repo_name = f"{repo_name}_{index}"  # Append index to make it unique
+
+    dest_folder = os.path.join(script_dir, folder_name)
+    os.makedirs(dest_folder, exist_ok=True)  # Create destination folder if it doesn't exist
+
+    source_path = os.path.join(script_dir, repo_name)
+    dest_path = os.path.join(dest_folder, repo_name)
+
+    shutil.move(source_path, dest_path)
+
+# Main script
 def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("-f", "--file", default="nuclei.txt",
-                        help="Filename to read the repositories from. Default is 'nuclei.txt'")
+    # Add command line arguments
+    parser = argparse.ArgumentParser(description='Clone and validate Github repositories.')
+    parser.add_argument('-f', '--filepath', help='The path to the file with the list of repository URLs.', required=True)
     args = parser.parse_args()
 
-    # Path to the file
-    filepath = os.path.join(script_dir, args.file)
-
-    # Backup original file before any modifications
-    shutil.copy2(filepath, f'{filepath}.bak')
-
-    # Create a directory for the repositories if it doesn't exist
-    if not os.path.exists("nuclei_templates"):
-        os.makedirs("nuclei_templates")
-
-    # Change the current working directory
-    os.chdir("nuclei_templates")
-
-    attempted_urls = read_urls_from_file('attempted.txt')
-
-    urls = read_urls_from_file(filepath)
-
-    # Initialize counters for the total, successful, and failed attempts
+    api_key = get_github_api_key()
+    urls = read_urls_from_file(args.filepath)
     total_attempts, successful_downloads, failed_downloads, invalid_urls = 0, 0, 0, 0
 
-    valid_urls = [url for url in urls if not url.startswith('#')]
-    num_repos = len(valid_urls)
-    print(f"{Fore.BLUE}Cloning {num_repos} Nuclei templates repositories...{Style.RESET_ALL}")
+    for i, url in enumerate(urls, start=1):
+        print(f"\n{i}/{len(urls)}: {url}")
+        if is_url_valid(url):
+            if requires_auth(url, api_key):
+                print(f"{info_color}Skipping {url_color}{url}{Style.RESET_ALL} because it requires authentication.")
+                continue
 
-    api_key = get_github_api_key()
+            successful_clone, attempted_clone, valid_url = clone_and_validate_repo(url, i)
 
-    all_repos_exist = True
+            if successful_clone:
+                move_to_folder(url, i, 'validated')
+                successful_downloads += 1
+            elif attempted_clone:
+                move_to_folder(url, i, 'not-validated')
+                failed_downloads += 1
 
-    for index, url in enumerate(urls):
-        if url.startswith('#') or url in attempted_urls:  # ignore commented lines
-            continue
-
-        total_attempts += 1
-
-        if not is_url_valid(url):
-            print(f"{failure_prefix} URL not valid: {fail_color}{url}{Style.RESET_ALL}")
+            total_attempts += attempted_clone
+            invalid_urls += not valid_url
+        else:
+            print(f"{failure_prefix} URL is not valid: {url_color}{url}{Style.RESET_ALL}")
             invalid_urls += 1
-            with open(filepath, 'r') as f:
-                lines = f.readlines()
-            with open(filepath, 'w') as f:
-                for line in lines:
-                    if line.strip() == url:
-                        f.write(f"# {url}\n")  # Comment out the invalid url
-                    else:
-                        f.write(line)
-            continue
 
-        if requires_auth(url, api_key):
-            print(f"{failure_prefix} URL requires authentication or is a private repository, skipping: {fail_color}{url}{Style.RESET_ALL}")
-            continue
+    print(f"\n{success_prefix} Done. {successful_downloads} repositories downloaded successfully out of {total_attempts} attempted. {invalid_urls} URLs were invalid.")
 
-        success, exists = clone_repo(url, index)
-
-        attempted_urls.append(url)
-
-        if success:
-            successful_downloads += 1
-        elif not exists:
-            all_repos_exist = False
-            failed_downloads += 1
-
-    with open('attempted.txt', 'w') as f:
-        for url in attempted_urls:
-            f.write(url + '\n')
-
-    remove_empty_dirs()
-
-    # Print summary
-    print(f"\nTotal attempted downloads: {total_attempts}")
-    print(f"{success_prefix} Successful downloads: {successful_downloads}")
-    print(f"{failure_prefix} Failed downloads: {failed_downloads}")
-    print(f"{failure_prefix} Ignored invalid URLs: {invalid_urls}")
-
-    if all_repos_exist and successful_downloads == 0 and failed_downloads == 0:
-        print(f"{Fore.GREEN}All repositories from the list are already downloaded!{Style.RESET_ALL}")
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
