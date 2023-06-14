@@ -55,3 +55,13 @@ You can generate a personal access token on GitHub by following these steps:
 8. Copy the token to your clipboard. For security reasons, after you navigate off the page, you will not be able to see the token again.
 
 If you want to do unauthenticated search on Github API, just press 'Enter' when request for API token.
+
+# Legal Disclaimer
+
+This information, code, or software is provided "as is" and without any express or implied warranties, including, but not limited to, the implied warranties of merchantability and fitness for a particular purpose. The use of this information, code, or software is entirely at your own risk.
+
+The creator or provider of this information, code, or software does not assume responsibility for any errors that may appear in the provided materials, nor for any damages or losses that may arise from its use, whether such damages be direct, indirect, incidental, special, consequential, or otherwise.
+
+Any application or use of the information, code, or software should be done only after carefully evaluating its appropriateness and applicability to your specific situation. The user assumes full responsibility for any decisions made based on this information, code, or software.
+
+The content provided here is for informational purposes only and should not be construed as legal, financial, or professional advice. Users are urged to consult with an appropriate professional for specific advice tailored to their situation.
