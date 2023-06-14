@@ -16,15 +16,12 @@ init(autoreset=True)
 # Load environment variables from .env file
 load_dotenv()
 
-# Clear the screen
-# os.system('cls' if os.name == 'nt' else 'clear')
-
 def debug_log(msg: str, debug: bool):
     """Log the given message if debug is True."""
     if debug:
         print(msg)
 
-def handle_response(response, debug):
+def handle_response(response, debug, authenticated=False):
     """Handle the response from an API request."""
     debug_log(f"{Fore.BLUE}[+] Received response with status code: {Fore.GREEN}{response.status_code}{Style.RESET_ALL}", debug)
 
@@ -35,11 +32,17 @@ def handle_response(response, debug):
     rate_limit_remaining = int(response.headers.get('X-RateLimit-Remaining', 0))
     rate_limit_reset = int(response.headers.get('X-RateLimit-Reset', 0))
 
-    if rate_limit_remaining < 10:  # adjust the number as needed
+    # Choose threshold based on authentication
+    threshold = 4500 if authenticated else 50  # adjust the numbers as needed
+
+    if rate_limit_remaining < threshold:
         reset_time = rate_limit_reset - time.time()
         if reset_time > 0:
-            print(f"{Fore.LIGHTRED_EX}[-] Approaching rate limit. Sleeping for {Fore.LIGHTGREEN_EX}{reset_time}{Style.RESET_ALL} seconds.")
-            time.sleep(reset_time)
+            while reset_time > 0:
+                print(f"{Fore.LIGHTRED_EX}[-] Approaching rate limit. Sleeping for {Fore.LIGHTGREEN_EX}{reset_time}{Style.RESET_ALL} seconds.")
+                sleep_time = min(30, reset_time)
+                time.sleep(sleep_time)
+                reset_time -= sleep_time
 
     return True
 
