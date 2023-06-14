@@ -187,7 +187,7 @@ def main():
             print(f"{failure_prefix} URL requires authentication or is a private repository, skipping: {fail_color}{url}{Style.RESET_ALL}")
             continue
 
-        success, exists = clone_and_validate_repo(url, index, dir)
+        success, exists = clone_and_validate_repo(url, index, ".")
 
         attempted_urls.append(url)
 
