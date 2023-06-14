@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Author: David Espejo (Fortytwo Security)
 import requests
 import json
 import time
@@ -8,41 +7,70 @@ import os
 import subprocess
 import shutil
 import argparse
-import getpass
 from colorama import Fore, Style, init
 from dotenv import load_dotenv
 
 # Initialize colorama
 init(autoreset=True)
 
+# Load environment variables from .env file
+load_dotenv()
+
 # Clear the screen
-os.system('cls' if os.name == 'nt' else 'clear')
+# os.system('cls' if os.name == 'nt' else 'clear')
 
 def debug_log(msg: str, debug: bool):
     """Log the given message if debug is True."""
     if debug:
         print(msg)
 
+def handle_response(response, debug):
+    """Handle the response from an API request."""
+    debug_log(f"{Fore.BLUE}[+] Received response with status code: {Fore.GREEN}{response.status_code}{Style.RESET_ALL}", debug)
+
+    if response.status_code != 200:
+        print(f"{Fore.RED}[-] Error with status code: {Fore.RED}{response.status_code}{Style.RESET_ALL}")
+        return False
+
+    rate_limit_remaining = int(response.headers.get('X-RateLimit-Remaining', 0))
+    rate_limit_reset = int(response.headers.get('X-RateLimit-Reset', 0))
+
+    if rate_limit_remaining < 10:  # adjust the number as needed
+        reset_time = rate_limit_reset - time.time()
+        if reset_time > 0:
+            print(f"{Fore.LIGHTRED_EX}[-] Approaching rate limit. Sleeping for {Fore.LIGHTGREEN_EX}{reset_time}{Style.RESET_ALL} seconds.")
+            time.sleep(reset_time)
+
+    return True
+
+def append_to_file(filename, data):
+    """Append data to a file."""
+    with open(filename, "a") as file:
+        for item in data:
+            file.write(f"{item}\n")
+
 def search_github_repos(query_terms, debug=False):
     base_url = "https://api.github.com"
-    token = os.getenv('GITHUB_API_TOKEN')  # Read the token from environment variable
+    token = os.getenv('GITHUB_API_TOKEN', None)  # Read the token from environment variable or set to None if not found
+
     headers = {'Accept': 'application/vnd.github.v3+json'}
-    if token.strip():  # If the user provided a token
+    if token and token.strip():
         headers['Authorization'] = f'token {token}'
+
     search_url = f"{base_url}/search/repositories"
     search_params = {'q': ' OR '.join(query_terms), 'page': 1}
-        
+
     debug_log(f"{Fore.BLUE}Searching repositories with terms: {Fore.GREEN}{query_terms}{Style.RESET_ALL}", debug)
 
     found_repos = []
+    new_templates_file = "new_templates.txt"
+
+    if not os.path.exists(new_templates_file):
+        with open(new_templates_file, 'w'): pass  # create the file if it doesn't exist
 
     shutil.copy("nuclei.txt", "nuclei.txt.bak")
     with open("nuclei.txt.bak", "r") as file:
         existing_repos = set(line.strip() for line in file.readlines() if line.strip() and not line.startswith("#"))
-    
-    new_templates_file = "new_templates.txt"
-    if not os.path.exists(new_templates_file):
-        with open(new_templates_file, 'w'): pass  # create the file if it doesn't exist
 
     with open(new_templates_file, "r") as file:
         new_templates_repos = set(line.strip() for line in file.readlines() if line.strip() and not line.startswith("#"))
@@ -52,20 +80,8 @@ def search_github_repos(query_terms, debug=False):
 
         response = requests.get(search_url, headers=headers, params=search_params)
 
-        debug_log(f"{Fore.BLUE}[+] Received response with status code: {Fore.GREEN}{response.status_code}{Style.RESET_ALL}", debug)
-
-        if response.status_code != 200:
-            print(f"{Fore.RED}[-] Error with status code: {Fore.RED}{response.status_code}{Style.RESET_ALL}")
+        if not handle_response(response, debug):
             return
-
-        rate_limit_remaining = int(response.headers.get('X-RateLimit-Remaining', 0))
-        rate_limit_reset = int(response.headers.get('X-RateLimit-Reset', 0))
-
-        if rate_limit_remaining < 10:  # adjust the number as needed
-            reset_time = rate_limit_reset - time.time()
-            if reset_time > 0:
-                print(f"{Fore.LIGHTRED_EX}[-] Approaching rate limit. Sleeping for {Fore.LIGHTGREEN_EX}{reset_time}{Style.RESET_ALL} seconds.")
-                time.sleep(reset_time)
 
         data = response.json()
 
@@ -74,7 +90,7 @@ def search_github_repos(query_terms, debug=False):
             contents_url = f"{base_url}/repos/{repo['full_name']}/contents"
             contents_response = requests.get(contents_url, headers=headers)
 
-            if contents_response.status_code != 200:
+            if not handle_response(contents_response, debug):
                 continue
 
             contents = contents_response.json()
@@ -91,23 +107,19 @@ def search_github_repos(query_terms, debug=False):
         search_params['page'] += 1
 
     print(f"\n{Fore.GREEN}[+] Found {len(found_repos)} new Nuclei Template repositories.{Style.RESET_ALL}")
-    
+
     if found_repos:  # check if found_repos is not empty
         user_input = input(f"{Fore.BLUE}[*] Do you want to download the found repositories? (y/n): {Style.RESET_ALL}")
 
         if user_input.lower() == 'y':
-            with open(new_templates_file, "a") as file:  # Open in append mode
-                for repo in found_repos:
-                    file.write(f"{repo}\n")
-
+            append_to_file(new_templates_file, found_repos)
             print(f"{Fore.GREEN}[+] Running getnucleitemplates.py...{Style.RESET_ALL}")
             subprocess.run(["python3", "getnucleitemplates.py", "-f", new_templates_file])
-        
+
         user_input = input(f"\n{Fore.BLUE}[*] Do you want to add the new found repositories to nuclei.txt? (y/n): {Style.RESET_ALL}")
         if user_input.lower() == 'y':
-            with open("nuclei.txt", "a") as file:
-                for repo in found_repos:
-                    file.write(f"{repo}\n")
+            append_to_file("nuclei.txt", found_repos)
+
     else:
         print(f"{Fore.LIGHTRED_EX}[-] No new repositories found.{Style.RESET_ALL}")
 
