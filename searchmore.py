@@ -21,6 +21,8 @@ def debug_log(msg: str, debug: bool):
     if debug:
         print(msg)
 
+import time
+
 def handle_response(response, debug, authenticated=False):
     """Handle the response from an API request."""
     debug_log(f"{Fore.BLUE}[+] Received response with status code: {Fore.GREEN}{response.status_code}{Style.RESET_ALL}", debug)
@@ -32,17 +34,14 @@ def handle_response(response, debug, authenticated=False):
     rate_limit_remaining = int(response.headers.get('X-RateLimit-Remaining', 0))
     rate_limit_reset = int(response.headers.get('X-RateLimit-Reset', 0))
 
-    # Choose threshold based on authentication
-    threshold = 4500 if authenticated else 50  # adjust the numbers as needed
-
-    if rate_limit_remaining < threshold:
+    if rate_limit_remaining < 1:
         reset_time = rate_limit_reset - time.time()
         if reset_time > 0:
-            while reset_time > 0:
-                print(f"{Fore.LIGHTRED_EX}[-] Approaching rate limit. Sleeping for {Fore.LIGHTGREEN_EX}{reset_time}{Style.RESET_ALL} seconds.")
-                sleep_time = min(30, reset_time)
-                time.sleep(sleep_time)
-                reset_time -= sleep_time
+            print(f"{Fore.LIGHTRED_EX}[-] Rate limit exhausted. Sleeping for {Fore.LIGHTGREEN_EX}{reset_time}{Style.RESET_ALL} seconds.")
+            time.sleep(reset_time)
+    else:
+        # Rate limit is 30 requests per minute, sleep for 2 seconds to smooth out the requests over the minute
+        time.sleep(2)
 
     return True
 
