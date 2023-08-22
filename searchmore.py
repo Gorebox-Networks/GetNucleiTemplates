@@ -40,7 +40,7 @@ def handle_response(response, debug, authenticated=False):
             print(f"{Fore.LIGHTRED_EX}[-] Rate limit exhausted. Sleeping for {Fore.LIGHTGREEN_EX}{reset_time}{Style.RESET_ALL} seconds.")
             time.sleep(reset_time)
     else:
-        # Rate limit is 30 requests per minute, sleep for 2 seconds to smooth out the requests over the minute
+        # Rate limit is 30 requests per minute, sleep for 10 seconds to smooth out the requests over the minute
         time.sleep(10)
 
     return True
