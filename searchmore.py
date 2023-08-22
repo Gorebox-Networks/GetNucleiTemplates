@@ -33,17 +33,21 @@ def handle_response(response, debug, authenticated=False):
 
     rate_limit_remaining = int(response.headers.get('X-RateLimit-Remaining', 0))
     rate_limit_reset = int(response.headers.get('X-RateLimit-Reset', 0))
+    rate_limit_limit = int(response.headers.get('X-RateLimit-Limit', 0))  # Obtain the limit
 
-    if rate_limit_remaining < 1:
+    # Calculate the wait time by dividing the time until reset by the remaining requests
+    if rate_limit_remaining < 5:  # Adjust threshold as needed
         reset_time = rate_limit_reset - time.time()
         if reset_time > 0:
-            print(f"{Fore.LIGHTRED_EX}[-] Rate limit exhausted. Sleeping for {Fore.LIGHTGREEN_EX}{reset_time}{Style.RESET_ALL} seconds.")
+            print(f"{Fore.LIGHTRED_EX}[-] Approaching rate limit. Sleeping for {Fore.LIGHTGREEN_EX}{reset_time}{Style.RESET_ALL} seconds.")
             time.sleep(reset_time)
     else:
-        # Rate limit is 30 requests per minute, sleep for 10 seconds to smooth out the requests over the minute
-        time.sleep(10)
+        # Calculate a more dynamic sleep time
+        sleep_time = (rate_limit_reset - time.time()) / rate_limit_remaining
+        time.sleep(sleep_time)
 
     return True
+
 
 def append_to_file(filename, data):
     """Append data to a file."""
