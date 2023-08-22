@@ -207,6 +207,13 @@ https://github.com/Esonhugh/public-nuclei-template
 https://github.com/Rabb1ter/nuclei-templates
 https://github.com/zodmagus/z0ds3c-Nuclei-Templates
 https://github.com/thefool45/nuclei-templates
-https://github.com/thefool45/nuclei-templates
 https://github.com/SumedhDawadi/Nuclei_Template_Subdomain_Takeover
 https://github.com/r3dcl1ff/Symfony-Fuck
+https://github.com/polling-repo-continua/KozinTemplates
+https://github.com/b4dboy17/badboy_17-Nuclei-Templates-Collection
+https://github.com/narasimhareddy5x5/nuclei-templates
+https://github.com/baharebenesbordi/Nuclei-Templates
+https://github.com/v3l4r10/Nuclei-Templates
+https://github.com/Deepparasiya/Nuclei-Templates
+https://github.com/valaDevs/env-js-nuclei
+https://github.com/szybnev/nuclei-custom
