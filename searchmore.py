@@ -27,7 +27,10 @@ def handle_response(response, debug, authenticated=False):
     """Handle the response from an API request."""
     debug_log(f"{Fore.BLUE}[+] Received response with status code: {Fore.GREEN}{response.status_code}{Style.RESET_ALL}", debug)
 
-    if response.status_code != 200:
+    if response.status_code == 403:
+        print(f"{Fore.RED}[-] Forbidden: Check your token and permissions.{Style.RESET_ALL}")
+        return False
+    elif response.status_code != 200:
         print(f"{Fore.RED}[-] Error with status code: {Fore.RED}{response.status_code}{Style.RESET_ALL}")
         return False
 
