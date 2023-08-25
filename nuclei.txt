@@ -217,3 +217,4 @@ https://github.com/v3l4r10/Nuclei-Templates
 https://github.com/Deepparasiya/Nuclei-Templates
 https://github.com/valaDevs/env-js-nuclei
 https://github.com/szybnev/nuclei-custom
+https://github.com/microphone-mathematics/custom-nuclei-templates
