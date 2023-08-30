@@ -21,8 +21,6 @@ def debug_log(msg: str, debug: bool):
     if debug:
         print(msg)
 
-import time
-
 def handle_response(response, debug, authenticated=False):
     """Handle the response from an API request."""
     debug_log(f"{Fore.BLUE}[+] Received response with status code: {Fore.GREEN}{response.status_code}{Style.RESET_ALL}", debug)
