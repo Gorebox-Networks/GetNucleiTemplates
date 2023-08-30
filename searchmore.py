@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Author: David Espejo (Fortytwo Security)
 import os
 import json
 import time
@@ -28,7 +27,7 @@ def debug_log(msg: str, debug: bool) -> None:
     if debug:
         logging.debug(msg)
 
-def handle_response(response: requests.Response, debug: bool) -> bool:
+def handle_response(response: requests.Response, debug: bool, authenticated: bool = True) -> bool:
     """Handle the response from an API request."""
     debug_log(f"{Fore.BLUE}[+] Received response with status code: {Fore.GREEN}{response.status_code}{Style.RESET_ALL}", debug)
 
@@ -42,7 +41,9 @@ def handle_response(response: requests.Response, debug: bool) -> bool:
     rate_limit_remaining = int(response.headers.get('X-RateLimit-Remaining', 0))
     rate_limit_reset = int(response.headers.get('X-RateLimit-Reset', 0))
 
-    if rate_limit_remaining < 5:
+    threshold = 5 if authenticated else 1
+
+    if rate_limit_remaining < threshold:
         reset_time = max(rate_limit_reset - time.time(), 0)
         time.sleep(reset_time)
 
@@ -56,13 +57,15 @@ def append_to_file(filename: str, data: list) -> None:
 
 def search_github_repos(query_terms: list, debug: bool = False) -> None:
     token = os.getenv('GITHUB_API_KEY', None)
-    if token is None:
-        print("GitHub API token not found. Exiting.")
-        exit(1)
+    authenticated = True
 
     headers = {'Accept': 'application/vnd.github.v3+json'}
-    if token and token.strip():
+
+    if token:
         headers['Authorization'] = f'token {token}'
+    else:
+        print(f"{Fore.YELLOW}[!] GitHub API token not found. Proceeding with unauthenticated search.{Style.RESET_ALL}")
+        authenticated = False
 
     search_url = f"{BASE_URL}/search/repositories"
     search_params = {'q': ' OR '.join(query_terms), 'page': 1}
@@ -90,7 +93,7 @@ def search_github_repos(query_terms: list, debug: bool = False) -> None:
             print(f"An error occurred: {e}")
             return
 
-        if not handle_response(response, debug):
+        if not handle_response(response, debug, authenticated):
             return
 
         data = response.json()
@@ -103,7 +106,7 @@ def search_github_repos(query_terms: list, debug: bool = False) -> None:
                 print(f"An error occurred: {e}")
                 continue
 
-            if not handle_response(contents_response, debug):
+            if not handle_response(contents_response, debug, authenticated):
                 continue
 
             contents = contents_response.json()
@@ -123,10 +126,6 @@ def search_github_repos(query_terms: list, debug: bool = False) -> None:
 
     if found_repos:
         user_input = input(f"{Fore.BLUE}[*] Do you want to download the found repositories? (y/n): {Style.RESET_ALL}").strip().lower()
-        if user_input not in ['y', 'n']:
-            print("Invalid input. Exiting.")
-            exit(1)
-
         if user_input == 'y':
             append_to_file(new_templates_file, found_repos)
             print(f"{Fore.GREEN}[+] Running getnucleitemplates.py...{Style.RESET_ALL}")
