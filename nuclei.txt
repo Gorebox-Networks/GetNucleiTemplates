@@ -11,6 +11,7 @@
 # https://github.com/themastersunil/Nuclei-TamplatesBackup.git
 # https://github.com/themastersunil/nucleiDB
 # https://github.com/trungkay2/Nuclei-template
+# https://github.com/T4t4ru/nuclei-templates
 https://gist.github.com/0x240x23elu
 https://gist.github.com/ResistanceIsUseless/e46848f67706a8aa1205c9d2866bff31
 https://github.com/0x727/ObserverWard_0x727
@@ -72,7 +73,6 @@ https://github.com/Str1am/my-nuclei-templates
 https://github.com/SumedhDawadi/Custom-Nuclei-Template
 https://github.com/SumedhDawadi/Nuclei_Template_Subdomain_Takeover
 https://github.com/System00-Security/backflow
-https://github.com/T4t4ru/nuclei-templates
 https://github.com/V0idC0de/dir-listing-iis-test
 https://github.com/YashVardhanTrip/nuclei-templates
 https://github.com/adampielak/nuclei-templates
