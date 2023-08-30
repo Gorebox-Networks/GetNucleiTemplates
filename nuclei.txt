@@ -219,3 +219,5 @@ https://github.com/z3bd/nuclei-templates
 https://github.com/zer0yu/Open-PoC
 https://github.com/zinminphyo0/KozinTemplates
 https://github.com/zodmagus/z0ds3c-Nuclei-Templates
+https://github.com/valaDevs/nuclei-backupfile-finder
+https://github.com/imhunterand/nuclei-custom-templates
