@@ -1,27 +1,34 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-import requests
+# Author: David Espejo (Fortytwo Security)
+import os
 import json
 import time
-import os
+import requests
+import argparse
 import subprocess
 import shutil
-import argparse
 from colorama import Fore, Style, init
 from dotenv import load_dotenv
+import logging
 
 # Initialize colorama
 init(autoreset=True)
 
+# Initialize logging
+logging.basicConfig(level=logging.DEBUG)
+
 # Load environment variables from .env file
 load_dotenv()
 
-def debug_log(msg: str, debug: bool):
+BASE_URL = "https://api.github.com"
+
+def debug_log(msg: str, debug: bool) -> None:
     """Log the given message if debug is True."""
     if debug:
-        print(msg)
+        logging.debug(msg)
 
-def handle_response(response, debug, authenticated=False):
+def handle_response(response: requests.Response, debug: bool) -> bool:
     """Handle the response from an API request."""
     debug_log(f"{Fore.BLUE}[+] Received response with status code: {Fore.GREEN}{response.status_code}{Style.RESET_ALL}", debug)
 
@@ -34,37 +41,30 @@ def handle_response(response, debug, authenticated=False):
 
     rate_limit_remaining = int(response.headers.get('X-RateLimit-Remaining', 0))
     rate_limit_reset = int(response.headers.get('X-RateLimit-Reset', 0))
-    rate_limit_limit = int(response.headers.get('X-RateLimit-Limit', 0))  # Obtain the limit
 
-    # Calculate the wait time by dividing the time until reset by the remaining requests
-    if rate_limit_remaining < 5:  # Adjust threshold as needed
-        reset_time = rate_limit_reset - time.time()
-        if reset_time > 0:
-            print(f"{Fore.LIGHTRED_EX}[-] Approaching rate limit. Sleeping for {Fore.LIGHTGREEN_EX}{reset_time}{Style.RESET_ALL} seconds.")
-            time.sleep(reset_time)
-    else:
-        # Calculate a more dynamic sleep time
-        sleep_time = (rate_limit_reset - time.time()) / rate_limit_remaining
-        time.sleep(sleep_time)
+    if rate_limit_remaining < 5:
+        reset_time = max(rate_limit_reset - time.time(), 0)
+        time.sleep(reset_time)
 
     return True
 
-
-def append_to_file(filename, data):
+def append_to_file(filename: str, data: list) -> None:
     """Append data to a file."""
     with open(filename, "a") as file:
         for item in data:
             file.write(f"{item}\n")
 
-def search_github_repos(query_terms, debug=False):
-    base_url = "https://api.github.com"
-    token = os.getenv('GITHUB_API_TOKEN', None)  # Read the token from environment variable or set to None if not found
+def search_github_repos(query_terms: list, debug: bool = False) -> None:
+    token = os.getenv('GITHUB_API_KEY', None)
+    if token is None:
+        print("GitHub API token not found. Exiting.")
+        exit(1)
 
     headers = {'Accept': 'application/vnd.github.v3+json'}
     if token and token.strip():
         headers['Authorization'] = f'token {token}'
 
-    search_url = f"{base_url}/search/repositories"
+    search_url = f"{BASE_URL}/search/repositories"
     search_params = {'q': ' OR '.join(query_terms), 'page': 1}
 
     debug_log(f"{Fore.BLUE}Searching repositories with terms: {Fore.GREEN}{query_terms}{Style.RESET_ALL}", debug)
@@ -73,7 +73,8 @@ def search_github_repos(query_terms, debug=False):
     new_templates_file = "new_templates.txt"
 
     if not os.path.exists(new_templates_file):
-        with open(new_templates_file, 'w'): pass  # create the file if it doesn't exist
+        with open(new_templates_file, 'w'):
+            pass
 
     shutil.copy("nuclei.txt", "nuclei.txt.bak")
     with open("nuclei.txt.bak", "r") as file:
@@ -83,9 +84,11 @@ def search_github_repos(query_terms, debug=False):
         new_templates_repos = set(line.strip() for line in file.readlines() if line.strip() and not line.startswith("#"))
 
     while True:
-        debug_log(f"{Fore.BLUE}[+] Sending GET request to: {Fore.MAGENTA}{search_url}{Style.RESET_ALL}", debug)
-
-        response = requests.get(search_url, headers=headers, params=search_params)
+        try:
+            response = requests.get(search_url, headers=headers, params=search_params)
+        except requests.RequestException as e:
+            print(f"An error occurred: {e}")
+            return
 
         if not handle_response(response, debug):
             return
@@ -93,9 +96,12 @@ def search_github_repos(query_terms, debug=False):
         data = response.json()
 
         for repo in data["items"]:
-            # Check if repository contains .yaml or .yml files
-            contents_url = f"{base_url}/repos/{repo['full_name']}/contents"
-            contents_response = requests.get(contents_url, headers=headers)
+            contents_url = f"{BASE_URL}/repos/{repo['full_name']}/contents"
+            try:
+                contents_response = requests.get(contents_url, headers=headers)
+            except requests.RequestException as e:
+                print(f"An error occurred: {e}")
+                continue
 
             if not handle_response(contents_response, debug):
                 continue
@@ -115,18 +121,20 @@ def search_github_repos(query_terms, debug=False):
 
     print(f"\n{Fore.GREEN}[+] Found {len(found_repos)} new Nuclei Template repositories.{Style.RESET_ALL}")
 
-    if found_repos:  # check if found_repos is not empty
-        user_input = input(f"{Fore.BLUE}[*] Do you want to download the found repositories? (y/n): {Style.RESET_ALL}")
+    if found_repos:
+        user_input = input(f"{Fore.BLUE}[*] Do you want to download the found repositories? (y/n): {Style.RESET_ALL}").strip().lower()
+        if user_input not in ['y', 'n']:
+            print("Invalid input. Exiting.")
+            exit(1)
 
-        if user_input.lower() == 'y':
+        if user_input == 'y':
             append_to_file(new_templates_file, found_repos)
             print(f"{Fore.GREEN}[+] Running getnucleitemplates.py...{Style.RESET_ALL}")
             subprocess.run(["python3", "getnucleitemplates.py", "-f", new_templates_file])
 
-        user_input = input(f"\n{Fore.BLUE}[*] Do you want to add the new found repositories to nuclei.txt? (y/n): {Style.RESET_ALL}")
-        if user_input.lower() == 'y':
+        user_input = input(f"\n{Fore.BLUE}[*] Do you want to add the new found repositories to nuclei.txt? (y/n): {Style.RESET_ALL}").strip().lower()
+        if user_input == 'y':
             append_to_file("nuclei.txt", found_repos)
-
     else:
         print(f"{Fore.LIGHTRED_EX}[-] No new repositories found.{Style.RESET_ALL}")
 
