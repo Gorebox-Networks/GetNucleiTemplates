@@ -232,3 +232,4 @@ https://github.com/Dalaho-bangin/my_nuclei_templates
 https://github.com/reewardius/nuclei-special-templates
 https://github.com/nicholasaleks/NucleiGPT
 https://github.com/Tykerdestroy/Bug-bounty-custom-templates
+https://github.com/Mr-B0hl00l/nuclei-templates
