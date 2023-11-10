@@ -233,3 +233,4 @@ https://github.com/reewardius/nuclei-special-templates
 https://github.com/nicholasaleks/NucleiGPT
 https://github.com/Tykerdestroy/Bug-bounty-custom-templates
 https://github.com/Mr-B0hl00l/nuclei-templates
+https://github.com/UnaPibaGeek/honeypots-detection
