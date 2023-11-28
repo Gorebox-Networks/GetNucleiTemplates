@@ -236,3 +236,8 @@ https://github.com/Mr-B0hl00l/nuclei-templates
 https://github.com/Mr-B0hl00l/nuclei-templates
 https://github.com/UnaPibaGeek/honeypots-detection
 https://github.com/mdsabbirkhan/0xPugazh-my-nuclei-templates
+https://github.com/W01fh4cker/nucleiTemplatesClassifier
+https://github.com/ahmedalroky/nuclei-templates
+https://github.com/th3-r3sistanc3/nuclei-templates
+https://github.com/windyGarlic/my-nuclei-templates
+https://github.com/Shakilll/my_nuclei_templates
