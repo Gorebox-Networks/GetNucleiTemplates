@@ -241,3 +241,11 @@ https://github.com/ahmedalroky/nuclei-templates
 https://github.com/th3-r3sistanc3/nuclei-templates
 https://github.com/windyGarlic/my-nuclei-templates
 https://github.com/Shakilll/my_nuclei_templates
+https://github.com/VulnExpo/nuclei-templates
+https://github.com/0xKayala/Custom-Nuclei-Templates
+https://github.com/h4ndsh/nuclei-templates
+https://github.com/myuyu/nuclei-templates
+https://github.com/reewardius/nuclei-templates-new
+https://github.com/umityn/my-nuclei-templates
+https://github.com/Red-Darkin/Custom-Nuclei-Templates
+https://github.com/badboycxcc/CVE-2023-24100
