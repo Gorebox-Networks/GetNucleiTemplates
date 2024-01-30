@@ -256,3 +256,6 @@ https://github.com/0x71rex/0-Nuclei-Templates
 https://github.com/Gotcha-1G/CVE-2022-42889
 https://github.com/BagheeraAltered/FuzzingTemplate
 https://github.com/xjhonly/nuclei-templates
+https://github.com/xelemental/Nuclei-Templates
+https://github.com/HideNsec/nuclei-bitrix-templates
+https://github.com/fostane/my-nuclei-templates-1
