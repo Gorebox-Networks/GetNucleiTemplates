@@ -261,3 +261,4 @@ https://github.com/HideNsec/nuclei-bitrix-templates
 https://github.com/fostane/my-nuclei-templates-1
 https://github.com/Pavan-Alapati/nuclei-templates
 https://github.com/kaanatmacaa/CVE-2024-23897
+https://github.com/Christbowel/CVE-2024-25600_Nuclei-Template
