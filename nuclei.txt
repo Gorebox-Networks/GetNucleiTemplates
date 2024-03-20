@@ -15,7 +15,6 @@
 https://gist.github.com/0x240x23elu
 https://gist.github.com/ResistanceIsUseless/e46848f67706a8aa1205c9d2866bff31
 https://github.com/0x71rex/0-Nuclei-Templates
-https://github.com/0x727/ObserverWard_0x727
 https://github.com/0xAwali/Virtual-Host
 https://github.com/0xElkot/My-Nuclei-Templates
 https://github.com/0xKayala/Custom-Nuclei-Templates
