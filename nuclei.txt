@@ -86,7 +86,6 @@ https://github.com/Str1am/my-nuclei-templates
 https://github.com/SumedhDawadi/Custom-Nuclei-Template
 https://github.com/SumedhDawadi/Nuclei_Template_Subdomain_Takeover
 https://github.com/System00-Security/backflow
-https://github.com/T4t4ru/nuclei-templates
 https://github.com/Tykerdestroy/Bug-bounty-custom-templates
 https://github.com/UnaPibaGeek/honeypots-detection
 https://github.com/V0idC0de/dir-listing-iis-test
