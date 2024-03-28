@@ -264,3 +264,5 @@ https://github.com/zinminphyo0/KozinTemplates
 https://github.com/zodmagus/z0ds3c-Nuclei-Templates
 https://github.com/blackvitasoy/nuclei_templates
 https://github.com/BattalFaikAktas/custom-nuclei-templates
+https://github.com/0xc4sper0/Nuclei-templates
+https://github.com/abletsoff/custom-nuclei-templates
