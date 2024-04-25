@@ -268,3 +268,11 @@ https://github.com/0xc4sper0/Nuclei-templates
 https://github.com/abletsoff/custom-nuclei-templates
 https://github.com/rzizah/private-nuclei-template
 https://github.com/0xPugal/my-nuclei-templates
+https://github.com/jhonnybonny/nuclei-templates-bitrix
+https://github.com/Anja-dhnd/templates4nuclei
+https://github.com/andersonmv/Nuclei_Templates
+https://github.com/pushpak-11/nuclei-templates
+https://github.com/chudamax/custom_nuclei_templates
+https://github.com/emadshanab/nuclei-bitrix-templates
+https://github.com/Sachinart/manual-nuclei-templates
+https://github.com/exploit-io/nuclei-fuzz-templates
