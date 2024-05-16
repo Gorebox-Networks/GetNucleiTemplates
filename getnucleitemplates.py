@@ -8,10 +8,16 @@ import requests
 from typing import List, Tuple
 import shutil
 import argparse
-from colorama import Fore, Style
+from colorama import Fore, Style, init
 from dotenv import load_dotenv, set_key
 import getpass
 import time
+import logging
+import fcntl
+
+# Initialize colorama and logging
+init(autoreset=True)
+logging.basicConfig(level=logging.DEBUG)
 
 # Load environment variables
 script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -28,6 +34,14 @@ DEFAULT_FILE = "nuclei.txt"
 ATTEMPTED_FILE = "attempted.txt"
 CLONE_DIR = "nuclei-templates"
 
+def secure_set_key(file_path: str, key: str, value: str) -> None:
+    """Securely set an environment variable in the .env file."""
+    try:
+        set_key(file_path, key, value)
+        os.chmod(file_path, 0o600)  # Ensure the .env file is only accessible by the owner
+    except Exception as e:
+        logging.error(f"Failed to set key {key} in {file_path}: {e}")
+
 def read_urls_from_file(filepath: str) -> List[str]:
     with open(filepath, 'a'):
         pass  # Ensure the file exists
@@ -38,8 +52,15 @@ def get_github_api_key() -> str:
     api_key = os.getenv('GITHUB_API_KEY')
     if not api_key:
         api_key = getpass.getpass(f"{Fore.GREEN}Enter your Github API Key (or press 'Enter' for unauthenticated search): {Style.RESET_ALL}")
-        set_key(ENV_FILE, "GITHUB_API_KEY", api_key)
+        if not validate_api_key(api_key):
+            print(f"{FAIL_COLOR}Invalid GitHub API Key format.{Style.RESET_ALL}")
+            return ""
+        secure_set_key(ENV_FILE, "GITHUB_API_KEY", api_key)
     return api_key
+
+def validate_api_key(api_key: str) -> bool:
+    """Validate the format of the GitHub API Key."""
+    return bool(api_key) and len(api_key) in (40, 64)  # Basic length check, adjust as necessary
 
 def is_url_valid(url: str) -> bool:
     try:
@@ -73,6 +94,14 @@ def clone_repo(url: str, index: int) -> bool:
         print(f"{FAILURE_PREFIX} Failed cloning repo {url}. Reason: {e}{Style.RESET_ALL}")
         return False
 
+def append_to_file_securely(filepath: str, data: List[str]) -> None:
+    """Append data to a file in a secure manner."""
+    with open(filepath, 'a') as file:
+        fcntl.flock(file, fcntl.LOCK_EX)  # Acquire an exclusive lock
+        for item in data:
+            file.write(f"{item}\n")
+        fcntl.flock(file, fcntl.LOCK_UN)  # Release the lock
+
 def process_urls(filepath: str) -> Tuple[int, int, int, int]:
     attempted_urls = read_urls_from_file(ATTEMPTED_FILE)
     urls = read_urls_from_file(filepath)
@@ -103,8 +132,7 @@ def process_urls(filepath: str) -> Tuple[int, int, int, int]:
         else:
             failed_downloads += 1
 
-        with open(ATTEMPTED_FILE, 'a') as file:
-            file.write(f"{url}\n")
+        append_to_file_securely(ATTEMPTED_FILE, [url])
 
     return total_attempts, successful_downloads, failed_downloads, invalid_urls
 
