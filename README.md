@@ -11,7 +11,7 @@ Nuclei is a project that allows you to customize scanning for specific vulnerabi
 * Python 3.6 or newer: You can download it from the official Python website.
 * GitPython package: You can install it via pip with the following command in your terminal:
 
-  pip install GitPython
+  `pip install GitPython`
 
 * Git: This script uses git commands to clone repositories. If you haven't installed git yet, you can download it from the official Git website.
 
@@ -20,14 +20,14 @@ Nuclei is a project that allows you to customize scanning for specific vulnerabi
 * Update the nuclei.txt file with the list of repositories you want to clone.
 * Run the getnucleitemplates.py script to clone the repositories. It will clone the repositories into a new nuclei_templates directory, ignore commented lines, and comment out any invalid URLs.
 
-  python3 getnucleitemplates.py
+  `python3 getnucleitemplates.py`
   
   By default it uses the provided nuclei.txt file. With -f (--file) you can provide a custom file.
 
 * You will see a summary of the attempted downloads, successful downloads, failed downloads, ignored gists, and ignored invalid URLs. Any failed or invalid repository URLs will be commented out in nuclei.txt.
 * To find more repositories, run the searchmore.py script. This will search GitHub for repositories containing the string "nuclei-templates". It will handle pagination to ensure all possible repositories are found, and respect GitHub's rate limits.
 
-  python3 searchmore.py
+  `python3 searchmore.py`
 
 You will be presented with a summary of the found repositories. If you choose to download the found repositories, they will be added to the nuclei.txt file and getnucleitemplates.py will be executed to clone them.
 
@@ -36,11 +36,11 @@ Please note that using the GitHub API may require a personal access token if you
 New Functionality
 * Log Redaction: You can enable optional redaction of sensitive information in logs by using the --redact flag. This will redact the GitHub API key from the logs.
 
-  python3 searchmore.py --redact
+  `python3 searchmore.py --redact`
 
 * Debug Logging: Enable debug logging by using the --debug flag. This provides detailed logs for debugging purposes.
 
-  python3 searchmore.py --debug
+  `python3 searchmore.py --debug`
 
 You will be presented with a summary of the found repositories. If you choose to download the found repositories, they will be added to the nuclei.txt file and getnucleitemplates.py will be executed to clone them.
 
