@@ -33,15 +33,18 @@ You will be presented with a summary of the found repositories. If you choose to
 
 Please note that using the GitHub API may require a personal access token if you need to make a large number of requests. Refer to the GitHub API documentation for more information.
 
-# Notes
+New Functionality
+* Log Redaction: You can enable optional redaction of sensitive information in logs by using the --redact flag. This will redact the GitHub API key from the logs.
 
-The scripts will treat GitHub Gist links as invalid URLs and ignore them.
+  python3 searchmore.py --redact
 
-The scripts check for the existence of repositories before attempting to clone them to avoid errors.
+* Debug Logging: Enable debug logging by using the --debug flag. This provides detailed logs for debugging purposes.
 
-For the searchmore.py script, the search terms are currently hard-coded. If you want to search for different terms, you will need to modify the script.
+  python3 searchmore.py --debug
 
-IMPORTANT: This script now asks for your GitHub token in the terminal. Make sure to handle it carefully, as this token provides access to your GitHub account. Never share it with anyone and don't store it in a publicly accessible location. Consider using environment variables or a secure credential management system for storing sensitive information like this.
+You will be presented with a summary of the found repositories. If you choose to download the found repositories, they will be added to the nuclei.txt file and getnucleitemplates.py will be executed to clone them.
+
+Please note that using the GitHub API may require a personal access token if you need to make a large number of requests. Refer to the GitHub API documentation for more information.
 
 You can generate a personal access token on GitHub by following these steps:
 
@@ -54,7 +57,15 @@ You can generate a personal access token on GitHub by following these steps:
 7. Click Generate token.
 8. Copy the token to your clipboard. For security reasons, after you navigate off the page, you will not be able to see the token again.
 
-If you want to do unauthenticated search on Github API, just press 'Enter' when request for API token.
+If you want to do unauthenticated search on Github API, just press 'Enter' when request for API token. Note that search rate is slower in this case.
+
+# Notes
+
+* The scripts will treat GitHub Gist links as invalid URLs and ignore them.
+* The scripts check for the existence of repositories before attempting to clone them to avoid errors.
+* For the searchmore.py script, the search terms are currently hard-coded. If you want to search for different terms, you will need to modify the script.
+
+IMPORTANT: This script now asks for your GitHub token in the terminal. Make sure to handle it carefully, as this token provides access to your GitHub account. Never share it with anyone and don't store it in a publicly accessible location. Consider using environment variables or a secure credential management system for storing sensitive information like this.
 
 # Legal Disclaimer
 
