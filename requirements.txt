@@ -1,4 +1,4 @@
 gitpython==3.1.41
 colorama==0.4.6
-requests==2.31.0
+requests==2.32.0
 dotenv==0.0.5
