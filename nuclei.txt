@@ -299,3 +299,5 @@ https://github.com/adibarsyad/nuclei-ios
 https://github.com/Sysc4ll3r/CVE-2024-4577
 https://github.com/adibarsyad/nuclei-jsp-source-code-review
 https://github.com/edoardottt/RFDos-Scanner
+https://github.com/banditzCyber0x/template
+https://github.com/sardine-web/polaris-web-reflected-xss.git
