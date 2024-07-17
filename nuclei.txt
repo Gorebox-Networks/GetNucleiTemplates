@@ -301,3 +301,7 @@ https://github.com/adibarsyad/nuclei-jsp-source-code-review
 https://github.com/edoardottt/RFDos-Scanner
 https://github.com/banditzCyber0x/template
 https://github.com/sardine-web/polaris-web-reflected-xss.git
+https://github.com/Josekutty-K/nuclei-templates
+https://github.com/Mamilate/3-Nuclei-Templates
+https://github.com/ReksySec/3Nucleit-Templates
+https://github.com/Mohsenalmamun/Nuclei-Template
