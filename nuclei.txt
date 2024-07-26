@@ -305,3 +305,5 @@ https://github.com/Josekutty-K/nuclei-templates
 https://github.com/Mamilate/3-Nuclei-Templates
 https://github.com/ReksySec/3Nucleit-Templates
 https://github.com/Mohsenalmamun/Nuclei-Template
+https://github.com/K3ysTr0K3R/Custom-Nuclei-Templates
+https://github.com/br0wnst4n11/Custom_Nuclei_Templates
