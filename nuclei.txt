@@ -12,6 +12,7 @@
 # https://github.com/themastersunil/nucleiDB
 # https://github.com/trungkay2/Nuclei-template
 # https://github.com/shubham-rooter/Nuclei-Template-Collection
+# https://github.com/DrakenKun-cyber/Templates
 # https://gist.github.com/0x240x23elu
 https://gist.github.com/ResistanceIsUseless/e46848f67706a8aa1205c9d2866bff31
 https://github.com/0x71rex/0-Nuclei-Templates
@@ -38,7 +39,6 @@ https://github.com/Dalaho-bangin/nuclei-templates2
 https://github.com/Deep2142004/Nuclei-Templates
 https://github.com/Deepparasiya/Nuclei-Templates
 https://github.com/DoubleTakes/nuclei-templates
-https://github.com/DrakenKun-cyber/Templates
 https://github.com/Elsfa7-110/log4jNuclei
 https://github.com/Elsfa7-110/mynuclei-templates
 https://github.com/Erenlancaster/CVE-2021-46704
