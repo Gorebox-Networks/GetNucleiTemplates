@@ -12,8 +12,7 @@
 # https://github.com/themastersunil/nucleiDB
 # https://github.com/trungkay2/Nuclei-template
 # https://github.com/shubham-rooter/Nuclei-Template-Collection
-# https://github.com/DrakenKun-cyber/Templates
-# https://gist.github.com/0x240x23elu
+https://gist.github.com/0x240x23elu
 https://gist.github.com/ResistanceIsUseless/e46848f67706a8aa1205c9d2866bff31
 https://github.com/0x71rex/0-Nuclei-Templates
 https://github.com/0x727/ObserverWard_0x727
@@ -39,6 +38,7 @@ https://github.com/Dalaho-bangin/nuclei-templates2
 https://github.com/Deep2142004/Nuclei-Templates
 https://github.com/Deepparasiya/Nuclei-Templates
 https://github.com/DoubleTakes/nuclei-templates
+https://github.com/DrakenKun-cyber/Templates
 https://github.com/Elsfa7-110/log4jNuclei
 https://github.com/Elsfa7-110/mynuclei-templates
 https://github.com/Erenlancaster/CVE-2021-46704
@@ -125,7 +125,7 @@ https://github.com/daffainfo/my-nuclei-templates
 https://github.com/damon-sec/Nuclei-templates-Collection
 https://github.com/damon-sec/TCSZ-Nuclei
 https://github.com/dk4trin/templates-nuclei
-https://github.com/drfabiocastro/certwatcher-templates
+# https://github.com/drfabiocastro/certwatcher-templates  # Auto-commented: 404 not found
 https://github.com/e1abrador/SpringCorePoC.sh
 https://github.com/ed-red/redmc_custom_templates_nuclei
 https://github.com/ekinsb/Nuclei-Templates
@@ -140,13 +140,13 @@ https://github.com/glyptho/templatesallnuclei
 https://github.com/h4ndsh/nuclei-templates
 https://github.com/ibaiw/nuclei_templates
 https://github.com/im403/nuclei-temp
-https://github.com/imhunterand/nuclei-custom-templates
+# https://github.com/imhunterand/nuclei-custom-templates  # Auto-commented: 404 not found
 https://github.com/javaongsan/nuclei-templates
 https://github.com/justmumu/SpringShell
 https://github.com/k00kx/nuclei-templates
 https://github.com/kaanatmacaa/CVE-2024-23897
 https://github.com/kabilan1290/templates
-https://github.com/kernel-krunch/nuclei-templates
+# https://github.com/kernel-krunch/nuclei-templates  # Auto-commented: 404 not found
 https://github.com/kh4sh3i/CVE-2022-23131
 https://github.com/kh4sh3i/Nextcloud-Pentesting
 https://github.com/kh4sh3i/Webmin-CVE
@@ -177,11 +177,11 @@ https://github.com/numanturle/CVE-2022-41040
 https://github.com/nuts7/CVE-2023-27372
 https://github.com/obreinx/nuceli-templates
 https://github.com/optiv/mobile-nuclei-templates
-https://github.com/p0ch4t/nuclei-special-templates
+# https://github.com/p0ch4t/nuclei-special-templates  # Auto-commented: 404 not found
 https://github.com/p3n73st3r/Nuclei-Templates
 https://github.com/panch0r3d/nuclei-templates
 https://github.com/peanuth8r/Nuclei_Templates
-https://github.com/pentest-dev/Profesional-Nuclei-Templates
+# https://github.com/pentest-dev/Profesional-Nuclei-Templates  # Auto-commented: 404 not found
 https://github.com/pikpikcu/nuclei-templates
 https://github.com/ping-0day/templates
 https://github.com/polling-repo-continua/KozinTemplates
@@ -201,7 +201,7 @@ https://github.com/ree4pwn/my-nuclei-templates
 https://github.com/reewardius/mytemplates-log4shell
 https://github.com/reewardius/nuclei-special-templates
 https://github.com/reewardius/nuclei-templates
-https://github.com/reewardius/nuclei-templates-new
+# https://github.com/reewardius/nuclei-templates-new  # Auto-commented: 404 not found
 https://github.com/ricardomaia/nuclei-template-generator-for-wordpress-plugins
 https://github.com/rutgerhrm/valid8
 https://github.com/sadnansakin/my-nuclei-templates
@@ -213,22 +213,22 @@ https://github.com/shifa123/detections
 https://github.com/shubham-rooter/Nuclei-custom-templates
 https://github.com/sl4x0/NC-Templates
 https://github.com/smaranchand/nuclei-templates
-https://github.com/soapffz/myown-nuclei-poc
+# https://github.com/soapffz/myown-nuclei-poc  # Auto-commented: 404 not found
 https://github.com/soumya123raj/Nuclei
-https://github.com/souzomain/mytemplates
+# https://github.com/souzomain/mytemplates  # Auto-commented: 404 not found
 https://github.com/stevemason/nuclei-template-forked-daapd-path-traversal
 https://github.com/sudouday/nuclei-templates
 https://github.com/sushant-kamble/mynuclei-template
-https://github.com/szybnev/nuclei-custom
+# https://github.com/szybnev/nuclei-custom  # Auto-commented: 404 not found
 https://github.com/tamimhasan404/Open-Source-Nuclei-Templates-Downloader
 https://github.com/test502git/log4j-fuzz-head-poc
-https://github.com/testtt3424/nuclei-templates
+# https://github.com/testtt3424/nuclei-templates  # Auto-commented: 404 not found
 https://github.com/th3-r3sistanc3/nuclei-templates
 https://github.com/th3r4id/nuclei-templates
 https://github.com/thebrnwal/Content-Injection-Nuclei-Script
 https://github.com/thecyberneh/nuclei-templatess
 https://github.com/thecybertix/Nuclei-templates
-https://github.com/thefool45/nuclei-templates
+# https://github.com/thefool45/nuclei-templates  # Auto-commented: 404 not found
 https://github.com/thelabda/nuclei-templates
 https://github.com/themoonbaba/private_templates
 https://github.com/topscoder/nuclei-wordfence-cve
@@ -258,7 +258,7 @@ https://github.com/yarovit-developer/nuclei-templates
 https://github.com/yavolo/nuclei-templates
 https://github.com/z3bd/nuclei-templates
 https://github.com/zer0yu/Open-PoC
-https://github.com/zinminphyo0/KozinTemplates
+# https://github.com/zinminphyo0/KozinTemplates  # Auto-commented: 404 not found
 https://github.com/zodmagus/z0ds3c-Nuclei-Templates
 https://github.com/Christbowel/CVE-2024-25600_Nuclei-Template
 https://github.com/0xr2r/templates-nucleir2r
@@ -279,7 +279,7 @@ https://github.com/chudamax/custom_nuclei_templates
 https://github.com/emadshanab/nuclei-bitrix-templates
 https://github.com/Sachinart/manual-nuclei-templates
 https://github.com/exploit-io/nuclei-fuzz-templates
-https://github.com/hackersupcoming/Nuclei_Templates
+# https://github.com/hackersupcoming/Nuclei_Templates  # Auto-commented: 404 not found
 https://github.com/DiabloHTB/Nuclei-Template-CVE-2024-1561
 https://github.com/niranc/Nuclei-personal-templates
 https://github.com/Loftven/BIZONE_WAF_DETECt
@@ -308,7 +308,7 @@ https://github.com/Mohsenalmamun/Nuclei-Template
 https://github.com/K3ysTr0K3R/Custom-Nuclei-Templates
 https://github.com/br0wnst4n11/Custom_Nuclei_Templates
 https://github.com/juanschallibaum/CVE-2024-38473-Nuclei-Template
-https://github.com/fa-rrel/Nuclei-templates-xd 
+# https://github.com/fa-rrel/Nuclei-templates-xd  # Auto-commented: 404 not found
 https://github.com/superhexa/nuclei-templates
 https://github.com/ts4rin4/templates4nuclei
 https://github.com/jhonnybonny/nuclei-templates
@@ -327,23 +327,23 @@ https://github.com/emanueldosreis/CVE-2024-38856
 https://github.com/aredspy/CVE-2021-41182-Tester
 https://github.com/ZoomerTedJackson/Salesforce-ContentDocument-DetectorNuclei-Template
 https://github.com/coffinxp/nuclei-templates
-https://github.com/fa-rrel/Nuclei_templates2024
+# https://github.com/fa-rrel/Nuclei_templates2024  # Auto-commented: 404 not found
 https://github.com/r3dcl1ff/nuclei-templates
 https://github.com/hanc00l/some_nuclei_templates
 https://github.com/Ra7mo0on/nuclei-templates
 https://github.com/erengozaydin/Nuclei-Templates
-https://github.com/oxapavan/nuclei-templates
+# https://github.com/oxapavan/nuclei-templates  # Auto-commented: 404 not found
 https://github.com/nocomp/nuclei-templates
 https://github.com/ShadowHackrs/Nuclei-templates
 https://github.com/tgr420/nuclei-templates
-https://github.com/Sumit0x00/Nuclei_Templates
+# https://github.com/Sumit0x00/Nuclei_Templates  # Auto-commented: 404 not found
 https://github.com/Kennyslaboratory/Nuclei-Templates
 https://github.com/zeronine9/nuclei_Stuff
 https://github.com/hossamshady11/nuclei-templates-private
 https://github.com/cybershadowvps/coffinxp-nuclei-templates
 https://github.com/nischalbijukchhe/specific-nuclei-templates
 https://github.com/jinji9630/jinjo-nuclei-templates
-https://github.com/alibaykara/Nuclei-Templates-OWASP
+# https://github.com/alibaykara/Nuclei-Templates-OWASP  # Auto-commented: 404 not found
 https://github.com/dat-ayush/custom-nuclei-templates
 https://github.com/MuhammadWaseem29/Nuclei-templates-waseem
 https://github.com/xcode0xbug/Nuclei-Private-YAML-Templates
@@ -353,5 +353,22 @@ https://github.com/abh2technology/abh2-custom-templates-nucleiengine
 https://github.com/0xBl4nk/ssti-detection-nuclei
 https://github.com/xenigmus/nuclei-installer
 https://github.com/ViktorMares/geoserver-nuclei-template
-https://github.com/rix4uni/cent-configuration
+# https://github.com/rix4uni/cent-configuration  # Auto-commented: 404 not found
 https://github.com/byt3n33dl3/thc-Nuclei
+https://github.com/reewardius/nuclei-fast-templates
+https://github.com/templatesss/Nuclei-templatesllkl
+https://github.com/228Tapochek228/nuclei_templates
+https://github.com/jiniyasshah/nuclei-templates
+https://github.com/primension/nuclei-templates
+https://github.com/alvinbbbssss/nuclei-templates
+https://github.com/darses/nuclei-templates
+https://github.com/0x4d61686469/nuclei-private-templates
+https://github.com/NagliNagli/random-nuclei-templates
+https://github.com/huynq55-v2/nuclei-xss-templates
+https://github.com/yelaco/juice-shop-nuclei-templates
+https://github.com/VikingCloud/nuclei-templates-deleteme1
+https://github.com/moften/CVE-2025-31324-NUCLEI
+https://github.com/SAGEof6iixPATHS/cent
+https://github.com/imbas007/CVE-2025-30208-template
+https://github.com/SUPRAAA-1337/Nuclei_CVE-2025-31161_CVE-2025-2825
+https://github.com/shockingbonu/CVE-2024-4577-PHP-RCE
