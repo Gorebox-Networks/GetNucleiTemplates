@@ -1,15 +1,19 @@
 # Runtime dependencies for GetNucleiTemplates.
 #
-# gitpython was removed. It was pinned at 3.1.41, which carries 14 high-severity
-# advisories (command injection GHSA-4vpg-pfj8-m33q, repo-content RCE
-# GHSA-239g-whfq-7xj9, git-config injection GHSA-3rp5-jjmw-4wv2, ...), and the
+# gitpython was removed. It was pinned at 3.1.41, which carries a critical RCE
+# (GHSA-284h-m62q-gf8w: dormant multi-line git-config values become live injected
+# directives such as core.hooksPath) plus 23 high and 9 medium advisories. The
 # module is NEVER imported by this project: both scripts drive git through
-# `subprocess` with list-form argv. It was therefore pure install-time supply
-# chain exposure with no upside.
+# `subprocess` with list-form argv, so it was pure install-time supply chain
+# exposure with no upside. Dependabot reported 33 open alerts against it.
 #
-# requests was bumped from 2.32.0, which still falls under
-# GHSA-gc5v-m9x4-r6x2 (temp-file reuse) and GHSA-9hjg-9r4m-mvj7 (.netrc leak).
+# python-dotenv was moved 1.0.1 -> 1.2.4 for GHSA-mf9w-mj56-hr94: symlink
+# following in `set_key` allowed an arbitrary file overwrite. This project calls
+# `set_key()` directly in secure_set_key(), so that advisory was on a live path.
+#
+# requests moved 2.32.0 -> 2.34.2, clearing GHSA-gc5v-m9x4-r6x2 (temp-file reuse)
+# and GHSA-9hjg-9r4m-mvj7 (.netrc credential leak).
 
 colorama==0.4.6
-requests==2.32.4
-python-dotenv==1.0.1
+requests==2.34.2
+python-dotenv==1.2.4
