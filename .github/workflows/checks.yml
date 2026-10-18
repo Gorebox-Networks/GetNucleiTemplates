@@ -1,0 +1,60 @@
+name: checks
+
+# Replaces sync.yml, which was a byte-for-byte copy of the GitHub Actions
+# documentation example. It checked out the literal placeholders
+# 'src_user/src_repo' and 'dest_user/dest_repo', ran
+# `rsync -a --delete` between them and then `git push` on every push. It never
+# succeeded: this repository has zero recorded workflow runs.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b # v5.3.0
+        with:
+          python-version: '3.11'
+
+      # The failure this catches: eight repositories in this portfolio shipped a
+      # requirements.txt that could not be installed at all (stdlib modules
+      # listed as PyPI packages, contradictory pins, apt packages). A manifest
+      # that cannot install is not caught by anything else.
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+
+      # Fails on undefined names such as the `os.Exit` in cbk914/ShellShockCheck
+      # that was called without importing `os`.
+      - name: Syntax and undefined-name check
+        run: python -m compileall -q getnucleitemplates.py searchmore.py
+
+      # Imports the module with side effects that do not need network or a token.
+      - name: Import smoke test
+        run: python -c "import getnucleitemplates, searchmore; print('imports ok')"
+
+      - name: Unit tests
+        run: |
+          python -m pip install pytest
+          python -m pytest tests/ -v
+
+      - name: Dependency audit
+        run: python -m pip install pip-audit && python -m pip_audit -r requirements.txt

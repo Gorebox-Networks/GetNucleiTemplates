@@ -19,7 +19,14 @@ from pathlib import Path
 
 # Initialize colorama and logging
 init(autoreset=True)
-logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+# Logging level is configurable and defaults to WARNING. Previously this was
+# hard-coded to DEBUG at import time, which overrode the caller's intent and
+# printed every HTTP request to the console.
+_LOG_LEVEL = os.getenv("NUCLEI_LOG_LEVEL", "WARNING").upper()
+logging.basicConfig(
+    level=getattr(logging, _LOG_LEVEL, logging.WARNING),
+    format='%(asctime)s - %(levelname)s - %(message)s',
+)
 
 # Load environment variables
 script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -35,6 +42,10 @@ ENV_FILE = ".env"
 DEFAULT_FILE = "nuclei.txt"
 ATTEMPTED_FILE = "attempted.txt"
 CLONE_DIR = "nuclei-templates"
+
+# Canonical name for the GitHub token. searchmore.py used to read a different
+# variable name than this script, which left half the tool unauthenticated.
+GITHUB_TOKEN_ENV = "GITHUB_API_TOKEN"
 
 # Track 404 URLs for commenting
 urls_404 = []
@@ -61,18 +72,41 @@ def write_urls_to_file(filepath: str, urls: List[str]) -> None:
 
 
 def get_github_api_key() -> str:
-    api_key = os.getenv('GITHUB_API_KEY')
+    """Resolve the GitHub token.
+
+    The variable was previously spelled GITHUB_API_KEY here and
+    GITHUB_API_TOKEN in searchmore.py, so setting one silently left the other
+    half of the tool unauthenticated. Both spellings are accepted here and the
+    canonical name below is the only one written back to .env.
+    """
+    api_key = os.getenv(GITHUB_TOKEN_ENV) or os.getenv("GITHUB_API_TOKEN") or os.getenv("GITHUB_API_KEY")
     if not api_key:
         api_key = getpass.getpass(f"{Fore.GREEN}Enter your Github API Key (or press 'Enter' for unauthenticated search): {Style.RESET_ALL}")
         if not validate_api_key(api_key):
             print(f"{FAIL_COLOR}Invalid GitHub API Key format.{Style.RESET_ALL}")
             return ""
-        secure_set_key(ENV_FILE, "GITHUB_API_KEY", api_key)
+        secure_set_key(ENV_FILE, GITHUB_TOKEN_ENV, api_key)
     return api_key
 
 
 def validate_api_key(api_key: str) -> bool:
-    return bool(api_key) and len(api_key) in (40, 64)
+    """Shape check for a GitHub token.
+
+    Previously this only tested the length (40 or 64 characters), which accepted
+    any string of the right size. It now requires the documented GitHub token
+    prefixes and rejects whitespace, so a mistyped or truncated value fails fast
+    instead of silently running unauthenticated.
+    """
+    if not api_key or api_key != api_key.strip():
+        return False
+    if any(ch.isspace() for ch in api_key):
+        return False
+    known_prefixes = ("ghp_", "gho_", "ghu_", "ghs_", "ghr_", "github_pat_")
+    if api_key.startswith("github_pat_"):
+        return len(api_key) > len("github_pat_")
+    if api_key.startswith(known_prefixes):
+        return len(api_key) == 40
+    return False
 
 
 def sanitize_repo_name(name: str) -> str:

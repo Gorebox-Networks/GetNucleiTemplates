@@ -8,12 +8,17 @@ Nuclei is a project that allows you to customize scanning for specific vulnerabi
 
 # Prerequisites
 
-* Python 3.6 or newer: You can download it from the official Python website.
-* GitPython package: You can install it via pip with the following command in your terminal:
+* Python 3.9 or newer: You can download it from the official Python website.
+* Git: This script shells out to the `git` binary to clone repositories. If you haven't installed git yet, you can download it from the official Git website.
 
-  `pip install GitPython`
+  Note: the GitPython package is **not** required. Earlier documentation told you to
+  `pip install GitPython`, but the scripts never imported it; they call `git` through
+  `subprocess`. GitPython 3.1.41 carries 14 high-severity advisories, so requiring it
+  only added install-time risk.
 
-* Git: This script uses git commands to clone repositories. If you haven't installed git yet, you can download it from the official Git website.
+Install the pinned runtime dependencies:
+
+  `pip install -r requirements.txt`
 
 # Usage
 

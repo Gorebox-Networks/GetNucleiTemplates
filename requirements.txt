@@ -1,5 +1,15 @@
-gitpython==3.1.41
-colorama==0.4.6
-requests==2.32.0
-python-dotenv==1.0.1
+# Runtime dependencies for GetNucleiTemplates.
+#
+# gitpython was removed. It was pinned at 3.1.41, which carries 14 high-severity
+# advisories (command injection GHSA-4vpg-pfj8-m33q, repo-content RCE
+# GHSA-239g-whfq-7xj9, git-config injection GHSA-3rp5-jjmw-4wv2, ...), and the
+# module is NEVER imported by this project: both scripts drive git through
+# `subprocess` with list-form argv. It was therefore pure install-time supply
+# chain exposure with no upside.
+#
+# requests was bumped from 2.32.0, which still falls under
+# GHSA-gc5v-m9x4-r6x2 (temp-file reuse) and GHSA-9hjg-9r4m-mvj7 (.netrc leak).
 
+colorama==0.4.6
+requests==2.32.4
+python-dotenv==1.0.1

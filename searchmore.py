@@ -90,7 +90,12 @@ def validate_token(session, headers, debug: bool) -> bool:
 
 def search_github_repos(query_terms, debug=False):
     base_url = "https://api.github.com"
-    token = os.getenv("GITHUB_API_TOKEN")
+    # Accept every spelling the tool has used, so setting one variable
+    # authenticates both scripts. GITHUB_API_TOKEN is canonical.
+    token = (
+        os.getenv("GITHUB_API_TOKEN")
+        or os.getenv("GITHUB_API_KEY")
+    )
 
     headers = {"Accept": "application/vnd.github.v3+json"}
     if token and token.strip():
